@@ -57,10 +57,6 @@ set undofile
 " Add somting to runtimepath
 " set runtimepath+=$HOME/vimfiles/vundle.git/
 
-" Change the currently select tab label colors
-" This seems not to work in MacVim 
-hi TabLineSel ctermfg=Black ctermbg=Yellow
-
 set nowrap                   " Don't wrap lines
 set tabstop=2                " A tab is two spaces
 set softtabstop=2            " ????
@@ -155,29 +151,20 @@ set splitbelow
 " set foldlevel=2
 " set foldmethod=syntax
 
-function! MakeSession()
-  let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
-  if (filewritable(b:sessiondir) != 2)
-    exe 'silent !mkdir -p ' b:sessiondir
-    redraw!
-  endif
-  let b:filename = b:sessiondir . '/session.vim'
-  exe "mksession! " . b:filename
-endfunction
+"au VimLeave * :call MakeSession()
 
-function! LoadSession()
-  let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
-  let b:sessionfile = b:sessiondir . "/session.vim"
-  if (filereadable(b:sessionfile))
-    exe 'source ' b:sessionfile
+function! SaveSession()
+  if v:this_session != ""
+    echo "Saving."
+    exe 'mksession! ' . '"' . v:this_session . '"'
   else
-    echo "No session loaded."
+    echo "No Session."
   endif
 endfunction
-au VimEnter * nested :call LoadSession()
-au VimLeave * :call MakeSession()
 
-" Disable swap files, system dont crash taht often these days
+au VimLeave * :call SaveSession()
+
+" Disable swap files, system dont crash that often these days
 set updatecount=0
 
 " disable cursor keys in normal mode
@@ -185,3 +172,51 @@ map <Left>  :echo "no!"<cr>
 map <Right> :echo "no!"<cr>
 map <Up>    :echo "no!"<cr>
 map <Down>  :echo "no!"<cr>
+
+
+" Paste toggle (,p)
+set pastetoggle=<leader>p
+map <leader>p :set invpaste paste?<CR>
+
+" Remap :W to :w
+" command W w
+
+let g:UltiSnipsUsePythonVersion = 2
+let g:UltiSnipsListSnippets = '<c-g>'
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
+autocmd Filetype snippets setlocal expandtab tabstop=4 shiftwidth=4
+
+" Saving options in sessions prevent them from benefitting from
+" updates in this very file and can be the cause of serious headaches.
+" Thus, I don't save them:
+set sessionoptions-=options
+
+" Quick Fix
+function! ToggleQF() 
+    if !exists("g:fx_toggle") 
+        let g:fx_toggle = 0 
+    endif 
+    if g:fx_toggle == 0 
+        let g:fx_toggle = 1 
+        copen 
+    else 
+        let g:fx_toggle = 0 
+        cclose 
+    endif 
+endfunc 
+
+" Toggle quickfix
+nnoremap <leader>q <ESC>:call ToggleQF() <CR>
+
+" Call Gundo
+nnoremap <leader>g :GundoToggle<CR>
+
+"prevent expand tab in .snippets files
+au Filetype snippets setl noet
+
+"Add .md extension as markdown filetype
+autocmd BufRead,BufNewFile  *.md set filetype=markdown
+
