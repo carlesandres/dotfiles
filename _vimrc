@@ -25,7 +25,6 @@ NeoBundle 'tpope/vim-surround'
 NeoBundle 'tpope/vim-heroku'
 NeoBundle 'tpope/vim-repeat'
 NeoBundle 'tpope/vim-rails'
-"NeoBundle 'tpope/vim-rails'
 
 
 NeoBundle 'Shougo/vimproc.vim', {
@@ -59,6 +58,7 @@ NeoBundle 'Shutnik/jshint2.vim'
 NeoBundle 'mustache/vim-mustache-handlebars'
 NeoBundle 'evidens/vim-twig'
 NeoBundle 'editorconfig/editorconfig-vim'
+NeoBundle 'elzr/vim-json'
 "NeoBundle 'flazz/vim-colorschemes'
 "NeoBundle 'chriskempson/base16-vim'
 "NeoBundle 'reedes/vim-thematic'
@@ -123,7 +123,7 @@ hi TabLineSel ctermfg=Black ctermbg=Yellow
 :autocmd InsertEnter * set cul
 :autocmd InsertLeave * set nocul
 
-set nohlsearch                    " Disable hilight searches
+set hlsearch                    " Disable hilight searches
 set incsearch                     " Find next match as we type the search
 set ignorecase                    " Searches are case insensitive
 set smartcase                     " Unless there is at least one capital letter
@@ -146,6 +146,9 @@ set expandtab                " Use spaces, not tabs
 " Other options here: http://stackoverflow.com/questions/657447/vim-clear-last-search-highlighting
 noremap <CR> :noh<CR><CR>
 
+" Another way to turn off search highlight
+nnoremap <leader><space> :nohlsearch<CR>
+
 " Time out on key codes but not mappings.
 " Basically this makes terminal Vim work sanely.
 set notimeout
@@ -157,6 +160,9 @@ set statusline+=%*
 set guifont=Monaco:h18 "Change default font and size for MacVim
 set shellcmdflag=-ic "Make :! behave like the command prompt
 
+set lazyredraw          " redraw only when we need to.
+set showmatch           " highlight matching [{()}]
+
 " Let's make it easy to edit this file (mnemonic for the key sequence is
 " 'e'dit 'v'imrc)
 nmap <silent> ,ev :e $MYVIMRC<cr>
@@ -165,13 +171,11 @@ nmap <silent> ,ev :e $MYVIMRC<cr>
 " 's'ource 'v'imrc)
 nmap <silent> ,sv :so $MYVIMRC<cr>
 
-" from :h zencoding-customize-keymappings
-let g:user_emmet_leader_key='<C-Z>'
-imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
-
-"let g:user_zen_expandabbr_key = '<c-e>'
+" Emmet settings
+" imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
+" let g:user_emmet_expandabbr_key = '<Tab>'
+" Make emmet complete tags using omnifunc
 let g:user_emmet_complete_tag = 1
-
 let g:user_emmet_settings = {
 \  'scss' : {
 \    'filters' : 'fc',
@@ -273,7 +277,7 @@ endfunc
 nnoremap <leader>q <ESC>:call ToggleQF() <CR>
 
 " Call Gundo
-nnoremap <leader>g :GundoToggle<CR>
+" nnoremap <leader>g :GundoToggle<CR>
 let g:gundo_width = 30
 let g:gundo_preview_bottom = 1
 
@@ -334,16 +338,23 @@ endif
 " See https://github.com/Shougo/unite.vim/issues/236#issuecomment-51983184
 let g:unite_source_rec_unit = 250
 
+" Allow longer search patterns
+let g:unite_matcher_fuzzy_max_input_length = 30
+
 let g:unite_source_history_yank_enable = 1
 call unite#filters#sorter_default#use(['sorter_rank'])
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
 nnoremap <leader>f :<C-u>Unite -no-split -buffer-name=files   -start-insert file_rec/async:!<cr>
-nnoremap <leader>F :<C-u>Unite -no-split -buffer-name=files   -start-insert file<cr>
+nnoremap <leader>F :<C-u>Unite -no-split -buffer-name=files   -auto-highlight -start-insert file<cr>
 nnoremap <leader>r :<C-u>Unite -no-split -buffer-name=mru     -start-insert file_mru<cr>
 nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank    history/yank<cr>
 nnoremap <leader>e :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
 nnoremap <leader>b :<C-u>Unite -no-split -buffer-name=buffer  -start-insert buffer<cr>
 nnoremap <leader>G :<C-u>Unite -no-split grep:.<cr>
+
+nnoremap <leader>gb :Gblame<cr>
+nnoremap <leader>gc :Gcommit<cr>
+nnoremap <leader>gd :Gdiff<cr>
 
 " Set the size of the preview window used by fugitive
 " and others
@@ -357,8 +368,18 @@ set nostartofline
 nnoremap <leader>o :only<cr>
 
 " Toogle NERDTree
+" Remember unite's <leader>F is better at looking for paths
 nnoremap <leader>n :NERDTreeToggle<cr>
 
 " Gists
 " let g:gist_detect_filetype = 1
 " let g:gist_post_private = 1
+
+" Remove spaces at the end of lines (doesn't keep cursor position)
+:nnoremap <Space>s :%s/\<<C-r><C-w>\>/
+
+" Don't hide quotes on JSON files
+let g:vim_json_syntax_conceal = 0
+
+"Add a colored column at column 85
+set colorcolumn=85
