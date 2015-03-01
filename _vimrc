@@ -69,6 +69,8 @@ NeoBundle 'SirVer/ultisnips'
 " Snippets are separated from the engine. Add this if you want them:
 NeoBundle 'honza/vim-snippets'
 
+NeoBundle 'goldfeld/vim-seek'
+
 " Required:
 call neobundle#end()
 
@@ -383,3 +385,22 @@ let g:vim_json_syntax_conceal = 0
 
 "Add a colored column at column 85
 set colorcolumn=85
+
+nnoremap <silent>[menu]g :Unite -silent -start-insert menu:grep<CR>
+
+let g:unite_source_menu_menus = {}
+let g:unite_source_menu_menus.grep = {
+    \ 'description' : '            gestionar repositorios git
+        \                            ⌘ [espacio]g',
+    \}
+let g:unite_source_menu_menus.grep.command_candidates = [
+    \['▷ grep (ag → ack → grep)                                     ⌘ ,a',
+        \'Unite -no-quit grep'],
+    \['▷ find',
+        \'Unite find'],
+    \['▷ locate',
+        \'Unite -start-insert locate'],
+    \['▷ vimgrep (very slow)',
+        \'Unite vimgrep'],
+    \]
+
