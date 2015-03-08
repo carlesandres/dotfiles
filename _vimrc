@@ -39,8 +39,9 @@ NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/unite.vim'
 
-" NeoBundle 'mattn/webapi-vim'
+NeoBundle 'mattn/webapi-vim'
 NeoBundle 'mattn/emmet-vim'
+NeoBundle 'mattn/gist-vim'
 
 NeoBundle 'scrooloose/nerdtree'
 NeoBundle 'editorconfig/editorconfig-vim'
@@ -69,7 +70,7 @@ NeoBundle 'SirVer/ultisnips'
 " Snippets are separated from the engine. Add this if you want them:
 NeoBundle 'honza/vim-snippets'
 
-NeoBundle 'goldfeld/vim-seek'
+" NeoBundle 'justinmk/vim-sneak'
 
 " Required:
 call neobundle#end()
@@ -148,9 +149,6 @@ set expandtab                " Use spaces, not tabs
 " Other options here: http://stackoverflow.com/questions/657447/vim-clear-last-search-highlighting
 noremap <CR> :noh<CR><CR>
 
-" Another way to turn off search highlight
-nnoremap <leader><space> :nohlsearch<CR>
-
 " Time out on key codes but not mappings.
 " Basically this makes terminal Vim work sanely.
 set notimeout
@@ -185,8 +183,8 @@ let g:user_emmet_settings = {
 \}
 
 " space = pagedown, - = pageup
-noremap <Space> <PageDown>
-noremap - <PageUp>
+nnoremap <Space> <PageDown>
+nnoremap - <PageUp>
 
 " Search Dash for word under cursor
 function! SearchDash()
@@ -197,18 +195,10 @@ function! SearchDash()
   execute s:cmd
   redraw!
 endfunction
-map <leader>d :call SearchDash()<CR>
 
 " gist-vim configuration
 let g:gist_show_privates = 1 " Show my private gists with ':Gist -l'
 let g:gist_post_private = 1 " I want all my gists private by default
-
-" Quickly switch to previous buffer
-nnoremap <leader><leader> <c-^>
-
-"USeful shortcuts for searching and replacing
-"noremap ;; :%s:::g<Left><Left><Left>
-"noremap ;' :%s:::cg<Left><Left><Left><Left>
 
 set splitright
 set splitbelow
@@ -216,20 +206,6 @@ set splitbelow
 " set foldenable  "Enable folding
 " set foldlevel=2
 " set foldmethod=syntax
-
-" This didn't work well for me
-"au VimLeave * :call MakeSession()
-
-function! SaveSession()
-  if v:this_session != ""
-    echo "Saving."
-    exe 'mksession! ' . '"' . v:this_session . '"'
-  else
-    echo "No Session."
-  endif
-endfunction
-
-au VimLeave * :call SaveSession()
 
 " Disable swap files, system dont crash that often these days
 set updatecount=0
@@ -239,14 +215,6 @@ map <Left>  :echo "no!"<cr>
 map <Right> :echo "no!"<cr>
 map <Up>    :echo "no!"<cr>
 map <Down>  :echo "no!"<cr>
-
-
-" Paste toggle (,p)
-set pastetoggle=<leader>p
-map <leader>p :set invpaste paste?<CR>
-
-" Remap :W to :w
-" command W w
 
 let g:UltiSnipsUsePythonVersion = 2
 let g:UltiSnipsListSnippets = '<c-g>'
@@ -275,22 +243,11 @@ function! ToggleQF()
     endif
 endfunc
 
-" Toggle quickfix
-nnoremap <leader>q <ESC>:call ToggleQF() <CR>
-
-" Call Gundo
-" nnoremap <leader>g :GundoToggle<CR>
-let g:gundo_width = 30
-let g:gundo_preview_bottom = 1
-
 "prevent expand tab in .snippets files
 au Filetype snippets setl noet
 
 "Add .md extension as markdown filetype
 autocmd BufRead,BufNewFile  *.md set filetype=markdown
-
-"Open current file in chrome
-nnoremap <leader>c :exe ':silent !firefox %'<CR>
 
 "Prevent instant markdown from starting automatically
 " you can invoke it with :InstantMarkdownPreview
@@ -302,24 +259,15 @@ let g:instant_markdown_autostart = 0
 " VIM Resources
 " http://robots.thoughtbot.com/integrating-vim-into-your-life
 
-" Call TagbarToggle
-nnoremap <leader>t :TagbarToggle<CR>
-nnoremap <leader>T :TagbarOpenAutoClose<CR>
-
-" Faster search and replace (see vimregex.com/#substitute )
-" This currently conflicts with use of semicolon to
-" repeat last fast search
-" noremap ;; :%s:::cg<Left><Left><Left>
-" noremap ;' :%s:::g<Left><Left><Left><Left>
-
-" Remove spaces trailing spaces in lines
-nnoremap <leader>s :%s/\s\+$//<CR>
-
 " Automatically call JSHint when buffer is saved
 let jshint2_save = 1
 
 " Automatically close error list
 let jshint2_close = 1
+
+"
+" Unite configuration
+"
 
 " Set up some custom ignores
 " call unite#custom_source('file_rec,file_rec/async,file_mru,file,buffer,grep',
@@ -346,17 +294,6 @@ let g:unite_matcher_fuzzy_max_input_length = 30
 let g:unite_source_history_yank_enable = 1
 call unite#filters#sorter_default#use(['sorter_rank'])
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
-nnoremap <leader>f :<C-u>Unite -no-split -buffer-name=files   -start-insert file_rec/async:!<cr>
-nnoremap <leader>F :<C-u>Unite -no-split -buffer-name=files   -auto-highlight -start-insert file<cr>
-nnoremap <leader>r :<C-u>Unite -no-split -buffer-name=mru     -start-insert file_mru<cr>
-nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank    history/yank<cr>
-nnoremap <leader>e :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
-nnoremap <leader>b :<C-u>Unite -no-split -buffer-name=buffer  -start-insert buffer<cr>
-nnoremap <leader>G :<C-u>Unite -no-split grep:.<cr>
-
-nnoremap <leader>gb :Gblame<cr>
-nnoremap <leader>gc :Gcommit<cr>
-nnoremap <leader>gd :Gdiff<cr>
 
 " Set the size of the preview window used by fugitive
 " and others
@@ -365,13 +302,6 @@ set previewheight=20
 " Prevent cursor from jumping to beginning of line
 " when switching between buffers
 set nostartofline
-
-" Shortcut to close all other windows
-nnoremap <leader>o :only<cr>
-
-" Toogle NERDTree
-" Remember unite's <leader>F is better at looking for paths
-nnoremap <leader>n :NERDTreeToggle<cr>
 
 " Gists
 " let g:gist_detect_filetype = 1
@@ -386,7 +316,72 @@ let g:vim_json_syntax_conceal = 0
 "Add a colored column at column 85
 set colorcolumn=85
 
-nnoremap <silent>[menu]g :Unite -silent -start-insert menu:grep<CR>
+" Allow help to take all screen real-state available
+set helpheight=99999
+
+"
+"  Leader mappings
+"
+
+" Search Dash for word under cursor
+" map <leader>d :call SearchDash()<CR>
+" nnoremap <leader>d :bd<CR>
+
+" Another way to turn off search highlight
+" nnoremap <leader><space> :nohlsearch<CR>
+
+" Quickly switch to previous buffer
+nnoremap <leader><leader> <c-^>
+
+" Paste toggle (,p)
+set pastetoggle=<leader>p
+map <leader>p :set invpaste paste?<CR>
+
+" Toggle quickfix
+nnoremap <leader>q <ESC>:call ToggleQF() <CR>
+
+" Call Gundo
+" nnoremap <leader>g :GundoToggle<CR>
+let g:gundo_width = 30
+let g:gundo_preview_bottom = 1
+
+" Call TagbarToggle
+nnoremap <leader>t :TagbarToggle<CR>
+nnoremap <leader>T :TagbarOpenAutoClose<CR>
+
+" Faster search and replace (see vimregex.com/#substitute )
+" This currently conflicts with use of semicolon to
+" repeat last fast search
+" noremap ;; :%s:::cg<Left><Left><Left>
+" noremap ;' :%s:::g<Left><Left><Left><Left>
+
+" Remove spaces trailing spaces in lines
+nnoremap <leader>s :%s/\s\+$//<CR>
+
+nnoremap <leader>f :<C-u>Unite -no-split -buffer-name=files   -start-insert file_rec/async:!<cr>
+nnoremap <leader>F :<C-u>Unite -no-split -buffer-name=files   -auto-highlight -start-insert file<cr>
+nnoremap <leader>r :<C-u>Unite -no-split -buffer-name=mru     -start-insert file_mru<cr>
+nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank    history/yank<cr>
+nnoremap <leader>e :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
+nnoremap <leader>b :<C-u>Unite -no-split -buffer-name=buffer  -start-insert buffer<cr>
+nnoremap <leader>G :<C-u>Unite -no-split grep:.<cr>
+nnoremap <leader>a :<C-u>Unite -no-split -no-quit grep<cr>
+
+nnoremap <leader>gb :Gblame<cr>
+nnoremap <leader>gc :Gcommit<cr>
+nnoremap <leader>gd :Gdiff<cr>
+
+" Shortcut to close all other windows
+nnoremap <leader>o :only<cr>
+
+" Toogle NERDTree
+" Remember unite's <leader>F is better at looking for paths
+nnoremap <leader>n :NERDTreeToggle<cr>
+
+nnoremap <leader>hl :Gist -l<cr>
+nnoremap <leader>hc :Gist 7796979<cr>
+
+nnoremap <leader>m :Unite -no-split -silent -start-insert menu:grep<CR>
 
 let g:unite_source_menu_menus = {}
 let g:unite_source_menu_menus.grep = {
@@ -403,4 +398,40 @@ let g:unite_source_menu_menus.grep.command_candidates = [
     \['▷ vimgrep (very slow)',
         \'Unite vimgrep'],
     \]
+
+
+
+
+
+
+
+
+
+
+"USeful shortcuts for searching and replacing
+"noremap ;; :%s:::g<Left><Left><Left>
+"noremap ;' :%s:::cg<Left><Left><Left><Left>
+
+" let g:sneak#streak = 1
+
+" TRy to open Chrome from its alias
+" nmap <leader>h2 yiW:!cr <c-r>" &<cr>
+" google
+
+
+
+
+" This didn't work well for me
+"au VimLeave * :call MakeSession()
+
+function! SaveSession()
+  if v:this_session != ""
+    echo "Saving."
+    exe 'mksession! ' . '"' . v:this_session . '"'
+  else
+    echo "No Session."
+  endif
+endfunction
+
+au VimLeave * :call SaveSession()
 
