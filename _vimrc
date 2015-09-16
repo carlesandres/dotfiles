@@ -50,7 +50,6 @@ NeoBundle 'editorconfig/editorconfig-vim'
 NeoBundle 'suan/vim-instant-markdown'
 NeoBundle 'bling/vim-airline'
 
-
 NeoBundle 'scrooloose/syntastic'
 
 NeoBundle 'pangloss/vim-javascript'
@@ -59,27 +58,24 @@ NeoBundle 'mxw/vim-jsx'
 " NeoBundle 'groenewege/vim-less'
 " NeoBundle 'mustache/vim-mustache-handlebars'
 " NeoBundle 'evidens/vim-twig'
-" NeoBundle 'elzr/vim-json'
+NeoBundle 'elzr/vim-json'
 " NeoBundle 'Shutnik/jshint2.vim'
-
-
-
 
 NeoBundle 'rking/ag.vim'
 NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'sjl/gundo.vim'
 NeoBundle 'terryma/vim-multiple-cursors'
-" NeoBundle 'airblade/vim-gitgutter'
+NeoBundle 'airblade/vim-gitgutter'
 NeoBundle 'editorconfig/editorconfig-vim'
 NeoBundle 'tacroe/unite-mark'
-NeoBundle 'ujihisa/unite-colorscheme'
+" NeoBundle 'ujihisa/unite-colorscheme'
 
 " NeoBundle 'flazz/vim-colorschemes'
 "NeoBundle 'chriskempson/base16-vim'
 "NeoBundle 'reedes/vim-thematic'
 
 " Track the engine.
-" NeoBundle 'SirVer/ultisnips'
+NeoBundle 'SirVer/ultisnips'
 
 " Snippets are separated from the engine. Add this if you want them:
 NeoBundle 'honza/vim-snippets'
@@ -299,7 +295,7 @@ endfunc
 nnoremap <leader>q <ESC>:call ToggleQF() <CR>
 
 " Call Gundo
-nnoremap <leader>g :GundoToggle<CR>
+nnoremap <leader>gu :GundoToggle<CR>
 let g:gundo_width = 30
 let g:gundo_preview_bottom = 1
 
@@ -308,6 +304,7 @@ au Filetype snippets setl noet
 
 "Add .md extension as mkrkdown filetype
 autocmd BufRead,BufNewFile  *.md set filetype=markdown
+autocmd BufRead,BufNewFile  *.eslintrc set filetype=json
 
 "Prevent instant markdown from starting automatically
 " you can invoke it with :InstantMarkdownPreview
@@ -315,6 +312,7 @@ let g:instant_markdown_autostart = 0
 
 " Let vim-airline use powerline patched fonts
 " let g:airline_powerline_fonts = 1
+let g:airline#extensions#syntastic#enabled = 1
 
 " VIM Resources
 " http://robots.thoughtbot.com/integrating-vim-into-your-life
@@ -350,9 +348,9 @@ call unite#custom_source('file_rec,file_rec/async',
 let g:unite_matcher_fuzzy_max_input_length = 50
 
 if executable('ag')
-  let g:unite_source_rec_async_command= 'ag --follow --nocolor --nogroup --ignore ".hg" --ignore ".svn" --ignore ".git" --ignore ".bzr" -g ""'
+  let g:unite_source_rec_async_command= 'ag --follow --skip-vcs-ignores --nocolor --nogroup --ignore ".hg" --ignore ".svn" --ignore ".git" --ignore ".bzr" -g ""'
   let g:unite_source_grep_command = 'ag'
-  let g:unite_source_grep_default_opts = '--column --nogroup --nocolor --follow'
+  let g:unite_source_grep_default_opts = '--column --nogroup --nocolor --follow --skip-vcs-ignores'
   let g:unite_source_grep_recursive_opt = ''
 endif
 
@@ -411,8 +409,8 @@ nnoremap <leader>sc :<C-u>Unite -no-split grep:.:--css\ --sass\ --less<cr>
 " sc search only css files but on specific folder(s)
 nnoremap <leader>sC :<C-u>Unite -no-split grep::--css\ --sass\ --less<cr>
 
-" Temporary fix until I get ag to search across sass and css and less
-nnoremap <leader>sx :<C-u>Unite -no-split grep:--sass<cr>
+" sx search only sass and less files
+nnoremap <leader>sx :<C-u>Unite -no-split grep:.:--sass\ --less<cr>
 
 " sw search globally for word under cursor
 nnoremap <leader>sw :<C-u>UniteWithCursorWord -short-source-names -no-split grep:.<cr>
@@ -442,7 +440,8 @@ nnoremap <leader>n :NERDTreeToggle<cr>
 let g:vim_json_syntax_conceal = 0
 
 "Add a colored column at column 85
-set colorcolumn=85
+let &colorcolumn=join(range(81,999),",")
+" set colorcolumn=85
 
 " Gists
 let g:gist_detect_filetype = 1
@@ -510,14 +509,51 @@ let g:unite_source_menu_menus.git.command_candidates = [
     \['▷ ,cw          Replace word under cursor', 'normal ,cw'],
     \['▷ ^n           Multiple cursors', 'normal <C-n>'],
     \['▷ ,ss          Search snippets (list ultisnips)', 'normal ,ss>'],
+    \['▷ ,eu          Edit ultisnips', 'normal ,eu>'],
     \['▷ icwa<tab>    Console warn arguments (snippet)', 'normal icwa<tab>'],
     \['▷ git cd           (Fugitive)',
         \'Gcd'],
     \]
 nnoremap <leader>1 :Unite -silent -start-insert menu:git<CR>
 
-" Add paths
+" Edit in same path as current buffer
 nnoremap <leader>ew :e <C-R>=expand("%:p:h") . "/" <CR>
+
+" Join lines discarding empty spaces
+nnoremap <leader>jj Jx
 
 
 let g:jsx_ext_required = 0
+let g:syntastic_javascript_checkers = ['eslint']
+
+
+
+" " Fugitive shortcuts
+" nnoremap <leader>g :Git
+" nnoremap <leader>gb :Gblame<cr>
+" nnoremap <leader>gc :Gcommit<cr>
+" nnoremap <leader>gd :Gdiff<cr>
+" nnoremap <leader>gp :Git push<cr>
+" nnoremap <leader>gr :Gremove<cr>
+" nnoremap <leader>gs :Gstatus<cr>
+" nnoremap <leader>ga :Gwrite<cr>
+" nnoremap <leader>gg :w<cr>:Gwrite<cr>:Gcommit -m 'update'<cr>:Git push<cr><cr>:e<cr>
+" nnoremap <leader>gl :Glog --pretty=oneline -10<cr>
+"
+"
+
+" Edit scheme
+nnoremap <leader>es :e ~/.vim/colors/candres.vim<CR>
+
+" " Make syntastic check on open and on save
+" let g:syntastic_check_on_open = 1
+"
+" "Make syntastic not check when quitting
+" let g:syntastic_check_on_wq = 0
+"
+" "Make syntastic stop checking for error all the time
+" let g:syntastic_enable_highlighting = 1
+
+
+" nmap <silent> ,ev :e $MYVIMRC<cr>
+nnoremap <leader>ea :e ~/.aliases<cr>
