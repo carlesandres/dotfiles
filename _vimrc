@@ -99,6 +99,8 @@ NeoBundleCheck
 
 set t_Co=256
 
+set lazyredraw
+
 " Set syntax highlighting on
 syntax on
 set background=dark
@@ -106,7 +108,7 @@ set background=dark
 " colorscheme elflord
 " colorscheme vividchalk
 " colorscheme railscasts
-colorscheme candres
+colorscheme candres_colors
 
 let mapleader=","
 
@@ -365,6 +367,8 @@ call unite#filters#sorter_default#use(['sorter_selecta'])
 " call unite#filters#sorter_default#use(['sorter_rank'])
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
 
+" call unite#custom#source('recent', 'variables', { 'max_candidates' : 10 })
+
 nnoremap <leader>f :<C-u>Unite -no-split -buffer-name=files   -start-insert file_rec/async:!<cr>
 nnoremap <leader>F :<C-u>Unite -no-split -buffer-name=files    -start-insert file<cr>
 nnoremap <leader>r :<C-u>Unite -no-split -buffer-name=mru     -start-insert file_mru<cr>
@@ -447,7 +451,6 @@ let &colorcolumn=join(range(81,999),",")
 let g:gist_detect_filetype = 1
 let g:gist_post_private = 1
 
-
 " let g:user_emmet_expandabbr_key = '<C-y>,'
 " let g:user_emmet_expandword_key = '<C-y>;'
 " let g:user_emmet_update_tag = '<C-y>u'
@@ -529,30 +532,28 @@ let g:syntastic_javascript_checkers = ['eslint']
 
 
 " " Fugitive shortcuts
-" nnoremap <leader>g :Git
-" nnoremap <leader>gb :Gblame<cr>
-" nnoremap <leader>gc :Gcommit<cr>
-" nnoremap <leader>gd :Gdiff<cr>
-" nnoremap <leader>gp :Git push<cr>
-" nnoremap <leader>gr :Gremove<cr>
-" nnoremap <leader>gs :Gstatus<cr>
-" nnoremap <leader>ga :Gwrite<cr>
-" nnoremap <leader>gg :w<cr>:Gwrite<cr>:Gcommit -m 'update'<cr>:Git push<cr><cr>:e<cr>
-" nnoremap <leader>gl :Glog --pretty=oneline -10<cr>
-"
-"
+nnoremap <leader>g :Git
+nnoremap <leader>gb :Gblame<cr>
+nnoremap <leader>gc :Gcommit<cr>
+nnoremap <leader>gd :Gdiff<cr>
+nnoremap <leader>gp :Git push<cr>
+nnoremap <leader>gr :Gremove<cr>
+nnoremap <leader>gs :Gstatus<cr>
+nnoremap <leader>ga :Gwrite<cr>
+nnoremap <leader>gg :w<cr>:Gwrite<cr>:Gcommit -m 'update'<cr>:Git push<cr><cr>:e<cr>
+nnoremap <leader>gl :Glog --pretty=oneline -10<cr>
 
 " Edit scheme
 nnoremap <leader>es :e ~/.vim/colors/candres.vim<CR>
 
 " " Make syntastic check on open and on save
-" let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_open = 1
 "
 " "Make syntastic not check when quitting
-" let g:syntastic_check_on_wq = 0
+let g:syntastic_check_on_wq = 1
 "
 " "Make syntastic stop checking for error all the time
-" let g:syntastic_enable_highlighting = 1
+let g:syntastic_enable_highlighting = 0
 
 
 " nmap <silent> ,ev :e $MYVIMRC<cr>
