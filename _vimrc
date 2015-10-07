@@ -350,16 +350,11 @@ call unite#custom_source('file_rec,file_rec/async',
 let g:unite_matcher_fuzzy_max_input_length = 50
 
 if executable('ag')
-  let g:unite_source_rec_async_command= 'ag --follow --skip-vcs-ignores --nocolor --nogroup --ignore ".hg" --ignore ".svn" --ignore ".git" --ignore ".bzr" -g ""'
+  let g:unite_source_rec_async_command = ['ag', '--follow', '--skip-vcs-ignores', '--nocolor', '--nogroup', '--hidden', '-g', '']
   let g:unite_source_grep_command = 'ag'
   let g:unite_source_grep_default_opts = '--column --nogroup --nocolor --follow --skip-vcs-ignores'
   let g:unite_source_grep_recursive_opt = ''
 endif
-
-" let g:unite_source_rec_max_cache_files = 99999
-
-" See https://github.com/Shougo/unite.vim/issues/236#issuecomment-51983184
-" let g:unite_source_rec_unit = 250
 
 let g:unite_source_history_yank_enable = 1
 
@@ -367,12 +362,13 @@ call unite#filters#sorter_default#use(['sorter_selecta'])
 " call unite#filters#sorter_default#use(['sorter_rank'])
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
 
-nnoremap <leader>f :<C-u>Unite -no-split -buffer-name=files   -start-insert file_rec/async:!<cr>
-nnoremap <leader>F :<C-u>Unite -no-split -buffer-name=files    -start-insert file<cr>
-nnoremap <leader>r :<C-u>Unite -no-split -buffer-name=mru     -start-insert file_mru<cr>
-nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank    history/yank<cr>
-nnoremap <leader>b :<C-u>Unite -no-split -buffer-name=buffer  -start-insert buffer<cr>
+nnoremap <leader>f :<C-u>Unite -no-split -start-insert file_rec/async:!<cr>
+nnoremap <leader>F :<C-u>Unite -no-split -start-insert file<cr>
+nnoremap <leader>r :<C-u>Unite -no-split -start-insert file_mru<cr>
+nnoremap <leader>b :<C-u>Unite -no-split -start-insert buffer<cr>
+nnoremap <leader>y :<C-u>Unite -no-split history/yank<cr>
 nnoremap <leader>m :<C-u>Unite -no-split mark<cr>
+nnoremap <leader>j :<C-u>Unite -no-split jump<cr>
 
 " Limit recent files list to 10
 call unite#custom#source('file_mru', 'max_candidates' , 10 )
@@ -472,8 +468,6 @@ let g:gist_post_private = 1
 
 noremap <leader>d :bdelete<cr>
 
-nnoremap <leader>h :<C-u>Gist 7796979<cr>
-
 "<CR> - remove highlighting after search
 " Other options here: http://stackoverflow.com/questions/657447/vim-clear-last-search-highlighting
 " noremap <CR> :noh<CR><CR>
@@ -483,7 +477,6 @@ nnoremap <leader>h :<C-u>Gist 7796979<cr>
 
 " Replace word under cursor
 nnoremap <leader>cw :%s/\<<C-r><C-w>\>/
-
 
 nnoremap <leader>eu :<C-u>UltiSnipsEdit<cr>
 
@@ -531,8 +524,6 @@ nnoremap <leader>jj Jx
 
 let g:jsx_ext_required = 0
 let g:syntastic_javascript_checkers = ['eslint']
-
-
 
 " " Fugitive shortcuts
 nnoremap <leader>g :Git
