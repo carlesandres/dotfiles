@@ -367,14 +367,15 @@ call unite#filters#sorter_default#use(['sorter_selecta'])
 " call unite#filters#sorter_default#use(['sorter_rank'])
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
 
-" call unite#custom#source('recent', 'variables', { 'max_candidates' : 10 })
-
 nnoremap <leader>f :<C-u>Unite -no-split -buffer-name=files   -start-insert file_rec/async:!<cr>
 nnoremap <leader>F :<C-u>Unite -no-split -buffer-name=files    -start-insert file<cr>
 nnoremap <leader>r :<C-u>Unite -no-split -buffer-name=mru     -start-insert file_mru<cr>
 nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank    history/yank<cr>
 nnoremap <leader>b :<C-u>Unite -no-split -buffer-name=buffer  -start-insert buffer<cr>
 nnoremap <leader>m :<C-u>Unite -no-split mark<cr>
+
+" Limit recent files list to 10
+call unite#custom#source('file_mru', 'max_candidates' , 10 )
 
 " List colors schemes
 nnoremap <leader>lc :<C-u>Unite -no-split colorscheme<cr>
@@ -384,7 +385,7 @@ nnoremap <leader>lc :<C-u>Unite -no-split colorscheme<cr>
 
 
 " same as <leader>r (just because it makes sense)
-nnoremap <leader>sr :<C-u>Unite -no-split -buffer-name=mru     -start-insert file_mru<cr>
+nnoremap <leader>sr :<C-u>Unite -no-split -start-insert file_mru<cr>
 
 " sg: search globally
 nnoremap <leader>sg :<C-u>Unite -no-split grep:.<cr>
@@ -425,6 +426,8 @@ nnoremap <leader>sl :<C-u>Unite -start-insert -no-split line<cr>
 nnoremap <leader>ss :<C-u>Unite -start-insert -no-split ultisnips<cr>
 " Unite -start-insert -winheight=100 -immediately -no-empty ultisnips
 
+nnoremap <leader>sR :<C-u>Unite -start-insert -no-split directory_mru<cr>
+" Unite -start-insert -winheight=100 -immediately -no-empty ultisnips
 
 " Set the size of the preview window used by fugitive
 " and others
