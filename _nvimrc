@@ -1,10 +1,11 @@
 " NeoBundle Scripts-----------------------------
 if has('vim_starting')
-  set nocompatible               " Be iMproved
 
   " Required:
   set runtimepath+=/Users/candres/.vim/bundle/neobundle.vim/
 endif
+
+let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
 " Required:
 call neobundle#begin(expand('/Users/candres/.vim/bundle'))
@@ -24,11 +25,10 @@ NeoBundle 'tpope/vim-obsession'
 NeoBundle 'tpope/vim-unimpaired'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'tpope/vim-repeat'
-NeoBundle 'tpope/vim-vinegar'
-" NeoBundle 'justinmk/vim-sneak'
 " NeoBundle 'tpope/vim-rails'
 " NeoBundle 'tpope/vim-heroku'
-NeoBundle 'altercation/vim-colors-solarized'
+
+NeoBundle 'justinmk/vim-sneak'
 
 
 NeoBundle 'Shougo/vimproc.vim', {
@@ -70,7 +70,7 @@ NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundle 'airblade/vim-gitgutter'
 NeoBundle 'editorconfig/editorconfig-vim'
 NeoBundle 'tacroe/unite-mark'
-" NeoBundle 'ujihisa/unite-colorscheme'
+NeoBundle 'ujihisa/unite-colorscheme'
 
 " NeoBundle 'flazz/vim-colorschemes'
 "NeoBundle 'chriskempson/base16-vim'
@@ -84,6 +84,10 @@ NeoBundle 'honza/vim-snippets'
 
 NeoBundle 'vim-scripts/closetag.vim'
 NeoBundle 'justinmk/vim-gtfo'
+NeoBundle 'Rykka/colorv.vim'
+NeoBundle 'justinmk/vim-sneak'
+NeoBundle 'altercation/vim-colors-solarized'
+
 
 " Required:
 call neobundle#end()
@@ -99,18 +103,18 @@ NeoBundleCheck
 " call pathogen#infect()
 " call pathogen#helptags()
 
-set t_Co=256
+" set t_Co=256
 
 set lazyredraw
 
 " Set syntax highlighting on
 syntax on
 set background=dark
-" colorscheme solarized
+colorscheme solarized
 " colorscheme elflord
 " colorscheme vividchalk
 " colorscheme railscasts
-colorscheme candres_colors
+" colorscheme candres_colors
 
 let mapleader=","
 
@@ -180,11 +184,8 @@ nmap <silent> ,ev :e $MYVIMRC<cr>
 " 's'ource 'v'imrc)
 nmap <silent> ,sv :so $MYVIMRC<cr>
 
-" nmap <silent> <leader>av :e ~/.zsh-aliases<cr>
-" nmap <silent> <leader>ez :e ~/.zshrc<cr>
-
 " nmap <leader>as ! source ~/.aliases<cr>
-nnoremap <leader>V :VimShell<cr>
+" nnoremap <leader>V :VimShell<cr>
 
 " Use emmet only for html and css files
 " let g:user_emmet_install_global = 0
@@ -209,19 +210,19 @@ noremap + <PageDown>
 noremap - <PageUp>
 
 " Search Dash for word under cursor
-function! SearchDash()
-  let s:browser = "/usr/bin/open"
-  let s:wordUnderCursor = expand("<cword>")
-  let s:url = "dash://".s:wordUnderCursor
-  let s:cmd ="silent ! " . s:browser . " " . s:url
-  execute s:cmd
-  redraw!
-endfunction
+" function! SearchDash()
+"   let s:browser = "/usr/bin/open"
+"   let s:wordUnderCursor = expand("<cword>")
+"   let s:url = "dash://".s:wordUnderCursor
+"   let s:cmd ="silent ! " . s:browser . " " . s:url
+"   execute s:cmd
+"   redraw!
+" endfunction
 " map <leader>d :call SearchDash()<CR>
 
 " gist-vim configuration
-let g:gist_show_privates = 1 " Show my private gists with ':Gist -l'
-let g:gist_post_private = 1 " I want all my gists private by default
+" let g:gist_show_privates = 1 " Show my private gists with ':Gist -l'
+" let g:gist_post_private = 1 " I want all my gists private by default
 
 " Quickly switch to previous buffer
 nnoremap <leader><leader> <c-^>
@@ -318,6 +319,8 @@ let g:instant_markdown_autostart = 0
 " let g:airline_powerline_fonts = 1
 let g:airline#extensions#syntastic#enabled = 1
 
+let g:airline_detect_crypt=0
+
 " VIM Resources
 " http://robots.thoughtbot.com/integrating-vim-into-your-life
 
@@ -342,8 +345,8 @@ let jshint2_save = 1
 let jshint2_close = 1
 
 " Set up some custom ignores
-" call unite#custom_source('file_rec,file_rec/async,file_mru,file,buffer,grep',
-call unite#custom_source('file_rec,file_rec/async',
+" call unite#custom_source('file_rec,file_rec/neovim,file_mru,file,buffer,grep',
+call unite#custom_source('file_rec,file_rec/neovim',
       \ 'ignore_pattern', join([
       \ '\.git/',
       \ ], '\|'))
@@ -367,7 +370,7 @@ call unite#filters#sorter_default#use(['sorter_selecta'])
 " call unite#filters#sorter_default#use(['sorter_rank'])
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
 
-nnoremap <leader>f :<C-u>Unite -no-split -start-insert file_rec/async:!<cr>
+nnoremap <leader>f :<C-u>Unite -no-split -start-insert file_rec/neovim:!<cr>
 nnoremap <leader>F :<C-u>Unite -no-split -start-insert file<cr>
 nnoremap <leader>r :<C-u>Unite -no-split -start-insert file_mru<cr>
 nnoremap <leader>b :<C-u>Unite -no-split -start-insert buffer<cr>
@@ -543,7 +546,7 @@ nnoremap <leader>gg :w<cr>:Gwrite<cr>:Gcommit -m 'update'<cr>:Git push<cr><cr>:e
 nnoremap <leader>gl :Glog --pretty=oneline -10<cr>
 
 " Edit scheme
-nnoremap <leader>es :e ~/.vim/colors/candres.vim<CR>
+nnoremap <leader>es :e ~/.vim/colors/candres_colors.vim<CR>
 
 " " Make syntastic check on open and on save
 let g:syntastic_check_on_open = 1
