@@ -5,6 +5,8 @@ if has('vim_starting')
   set runtimepath+=/Users/candres/.vim/bundle/neobundle.vim/
 endif
 
+let $BASH_ENV = "~/.aliases"
+
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
 " Required:
@@ -68,12 +70,11 @@ NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'sjl/gundo.vim'
 NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundle 'airblade/vim-gitgutter'
-NeoBundle 'editorconfig/editorconfig-vim'
 NeoBundle 'tacroe/unite-mark'
 NeoBundle 'ujihisa/unite-colorscheme'
 
 " NeoBundle 'flazz/vim-colorschemes'
-"NeoBundle 'chriskempson/base16-vim'
+NeoBundle 'chriskempson/base16-vim'
 "NeoBundle 'reedes/vim-thematic'
 
 " Track the engine.
@@ -87,6 +88,8 @@ NeoBundle 'justinmk/vim-gtfo'
 NeoBundle 'Rykka/colorv.vim'
 NeoBundle 'justinmk/vim-sneak'
 NeoBundle 'altercation/vim-colors-solarized'
+NeoBundle 'majutsushi/tagbar'
+NeoBundle 'tsukkee/unite-tag'
 
 
 " Required:
@@ -110,7 +113,8 @@ set lazyredraw
 " Set syntax highlighting on
 syntax on
 set background=dark
-colorscheme solarized
+colorscheme base16-default
+" colorscheme solarized
 " colorscheme elflord
 " colorscheme vividchalk
 " colorscheme railscasts
@@ -160,10 +164,10 @@ set undodir=~/.vim/backups
 set undofile
 
 set nowrap                   " Don't wrap lines
-set tabstop=2                " A tab is two spaces
-set softtabstop=2            " ????
-set shiftwidth=2             " An autoindent with >> is 2 spaces
-set expandtab                " Use spaces, not tabs
+set tabstop=4                " A tab is two spaces
+set softtabstop=4            " ????
+set shiftwidth=4             " An autoindent with >> is 2 spaces
+set noexpandtab                " Use spaces, not tabs
 
 " Time out on key codes but not mappings.
 " Basically this makes terminal Vim work sanely.
@@ -325,8 +329,8 @@ let g:airline_detect_crypt=0
 " http://robots.thoughtbot.com/integrating-vim-into-your-life
 
 " Call TagbarToggle
-" nnoremap <leader>t :TagbarToggle<CR>
-" nnoremap <leader>T :TagbarOpenAutoClose<CR>
+nnoremap <leader>t :TagbarToggle<CR>
+nnoremap <leader>T :TagbarOpenAutoClose<CR>
 
 " Faster search and replace (see vimregex.com/#substitute )
 " This currently conflicts with use of semicolon to
