@@ -1,4 +1,5 @@
 " NeoBundle Scripts-----------------------------
+
 if has('vim_starting')
   set nocompatible               " Be iMproved
 
@@ -42,6 +43,7 @@ NeoBundle 'Shougo/vimproc.vim', {
 NeoBundle 'Shougo/neomru.vim'
 " NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/unite.vim'
+NeoBundle 'Shougo/neoyank.vim'
 
 NeoBundle 'mattn/webapi-vim'
 NeoBundle 'mattn/emmet-vim'
@@ -541,6 +543,8 @@ nnoremap <leader>gs :Gstatus<cr>
 nnoremap <leader>ga :Gwrite<cr>
 nnoremap <leader>gg :w<cr>:Gwrite<cr>:Gcommit -m 'update'<cr>:Git push<cr><cr>:e<cr>
 nnoremap <leader>gl :Glog --pretty=oneline -10<cr>
+" nnoremap <leader>gl :Glog --format="\%H %an %ad" --date=short<cr>
+
 
 " Edit scheme
 nnoremap <leader>es :e ~/.vim/colors/candres.vim<CR>
