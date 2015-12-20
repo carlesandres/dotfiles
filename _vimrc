@@ -526,7 +526,7 @@ nnoremap <leader>1 :Unite -silent -start-insert menu:git<CR>
 nnoremap <leader>ew :e <C-R>=expand("%:p:h") . "/" <CR>
 
 " Join lines discarding empty spaces
-nnoremap <leader>jj Jx
+" nnoremap <leader>jj Jx
 
 
 let g:jsx_ext_required = 0
