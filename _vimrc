@@ -556,7 +556,7 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 1
 "
 " "Make syntastic stop checking for error all the time
-let g:syntastic_enable_highlighting = 0
+let g:syntastic_enable_highlighting = 1
 
 
 " nmap <silent> ,ev :e $MYVIMRC<cr>
