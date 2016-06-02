@@ -1,4 +1,4 @@
-" NeoBundle Scripts-----------------------------
+"l NeoBundle Scripts-----------------------------
 if has('vim_starting')
 
   " Required:
@@ -75,12 +75,11 @@ NeoBundle 'scrooloose/syntastic'
 
 NeoBundle 'pangloss/vim-javascript'
 NeoBundle 'mxw/vim-jsx'
-" NeoBundle 'briancollins/vim-jst'
+NeoBundle 'briancollins/vim-jst'
 " NeoBundle 'groenewege/vim-less'
 " NeoBundle 'mustache/vim-mustache-handlebars'
 " NeoBundle 'evidens/vim-twig'
 NeoBundle 'elzr/vim-json'
-" NeoBundle 'Shutnik/jshint2.vim'
 
 NeoBundle 'rking/ag.vim'
 NeoBundle 'tomtom/tcomment_vim'
@@ -90,9 +89,7 @@ NeoBundle 'airblade/vim-gitgutter'
 NeoBundle 'tacroe/unite-mark'
 NeoBundle 'ujihisa/unite-colorscheme'
 
-" NeoBundle 'flazz/vim-colorschemes'
 NeoBundle 'chriskempson/base16-vim'
-"NeoBundle 'reedes/vim-thematic'
 
 " Track the engine.
 NeoBundle 'SirVer/ultisnips'
@@ -102,12 +99,11 @@ NeoBundle 'honza/vim-snippets'
 
 NeoBundle 'vim-scripts/closetag.vim'
 NeoBundle 'justinmk/vim-gtfo'
-" NeoBundle 'Rykka/colorv.vim'
 NeoBundle 'justinmk/vim-sneak'
-" NeoBundle 'altercation/vim-colors-solarized'
 NeoBundle 'majutsushi/tagbar'
 NeoBundle 'tsukkee/unite-tag'
 NeoBundle 'osyo-manga/unite-quickfix'
+NeoBundle 'samuelsimoes/vim-jsx-utils'
 
 
 " Required:
@@ -158,7 +154,7 @@ set showbreak=↪\
 set nojoinspaces                  " Use only 1 space after "." when joining lines, not 2
 
 "set status line the way I like it
-set stl=%f\ %m\ %r\ Line:\ %l/%L[%p%%]\ Col:\ %c\ Buf:\ #%n\ [%b][0x%B]
+set stl=%t\ %m\ %r\ Line:\ %l/%L[%p%%]\ Col:\ %c\ Buf:\ #%n\ [%b][0x%B]
 set showmode "Show which mode I am in
 set wildmenu "Command autocomplettion with the TAB key
 set autoread " Automatically updates buffer when file has been changed outside VIM
@@ -264,9 +260,6 @@ set splitbelow
 " set foldlevel=2
 " set foldmethod=syntax
 
-" This didn't work well for me
-"au VimLeave * :call MakeSession()
-
 function! SaveSession()
   if v:this_session != ""
     echo "Saving."
@@ -336,15 +329,15 @@ au Filetype snippets setl noet
 "Add .md extension as mkrkdown filetype
 autocmd BufRead,BufNewFile  *.md set filetype=markdown
 autocmd BufRead,BufNewFile  *.eslintrc set filetype=json
+" autocmd BufRead,BufNewFile  *.ejs set filetype=html
 
 "Prevent instant markdown from starting automatically
 " you can invoke it with :InstantMarkdownPreview
 let g:instant_markdown_autostart = 0
 
 " Let vim-airline use powerline patched fonts
-" let g:airline_powerline_fonts = 1
 let g:airline#extensions#syntastic#enabled = 1
-
+let g:airline_powerline_fonts = 1
 let g:airline_detect_crypt=0
 
 " VIM Resources
@@ -355,20 +348,12 @@ nnoremap <leader>t :TagbarToggle<CR>
 nnoremap <leader>T :TagbarOpenAutoClose<CR>
 
 " Faster search and replace (see vimregex.com/#substitute )
-" This currently conflicts with use of semicolon to
-" repeat last fast search
+" This currently conflicts with use of semicolon to repeat last fast search
 " noremap ;; :%s:::cg<Left><Left><Left>
 " noremap ;' :%s:::g<Left><Left><Left><Left>
 
-" Remove spaces trailing spaces in lines
-" Mnemonic: change spaces
+" Remove spaces trailing spaces in lines Mnemonic: change spaces
 nnoremap <leader>cs :%s/\s\+$//<CR>
-
-" Automatically call JSHint when buffer is saved
-let jshint2_save = 1
-
-" Automatically close error list
-let jshint2_close = 1
 
 " Set up some custom ignores
 call unite#custom_source('file_rec,file_rec/neovim', 'ignore_pattern', join(['\.git/'], '\|'))
@@ -386,7 +371,6 @@ endif
 let g:unite_source_history_yank_enable = 1
 
 call unite#filters#sorter_default#use(['sorter_selecta'])
-" call unite#filters#sorter_default#use(['sorter_rank'])
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
 
 nnoremap <leader>f :<C-u>Unite -no-split -start-insert file_rec/neovim:!<cr>
@@ -395,7 +379,7 @@ nnoremap <leader>r :<C-u>Unite -no-split -start-insert file_mru<cr>
 nnoremap <leader>b :<C-u>Unite -no-split -start-insert buffer<cr>
 nnoremap <leader>y :<C-u>Unite -no-split history/yank<cr>
 nnoremap <leader>m :<C-u>Unite -no-split mark<cr>
-nnoremap <leader>j :<C-u>Unite -no-split jump<cr>
+" nnoremap <leader>j :<C-u>Unite -no-split jump<cr>
 
 " Limit recent files list to 10
 call unite#custom#source('file_mru', 'max_candidates' , 10 )
@@ -442,6 +426,7 @@ nnoremap <leader>sx :<C-u>Unite -no-split grep:.:--sass\ --less<cr>
 
 " sw search globally for word under cursor
 nnoremap <leader>sw :<C-u>UniteWithCursorWord -short-source-names -no-split grep:.<cr>
+nnoremap <leader>sW :<C-u>UniteWithCursorWord -no-split line<cr>
 
 " sc search lines of text
 nnoremap <leader>sl :<C-u>Unite -start-insert -no-split line<cr>
@@ -454,8 +439,7 @@ nnoremap <leader>sR :<C-u>Unite -start-insert -no-split directory_mru<cr>
 " and others
 set previewheight=20
 
-" Prevent cursor from jumping to beginning of line
-" when switching between buffers
+" Prevent cursor from jumping to beginning of line when switching between buffers
 set nostartofline
 
 " Shortcut to close all other windows
@@ -506,23 +490,6 @@ nnoremap <leader>eu :<C-u>UltiSnipsEdit<cr>
 " inoremap <silent> <F12> <C-R>=(pumvisible()? "\<LT>C-E>":"")<CR><C-R>=UltiSnipsCallUnite()<CR>
 " nnoremap <silent> <F12> a<C-R>=(pumvisible()? "\<LT>C-E>":"")<CR><C-R>=UltiSnipsCallUnite()<CR>
 
-" menus {{{
-let g:unite_source_menu_menus = {}
-let g:unite_source_menu_menus.git = {
-    \ 'description' : '            gestionar repositorios git
-        \                            ⌘ [espacio]g',
-    \}
-let g:unite_source_menu_menus.git.command_candidates = [
-    \['▷ ,cw          Replace word under cursor', 'normal ,cw'],
-    \['▷ ^n           Multiple cursors', 'normal <C-n>'],
-    \['▷ ,ss          Search snippets (list ultisnips)', 'normal ,ss>'],
-    \['▷ ,eu          Edit ultisnips', 'normal ,eu>'],
-    \['▷ icwa<tab>    Console warn arguments (snippet)', 'normal icwa<tab>'],
-    \['▷ git cd           (Fugitive)',
-        \'Gcd'],
-    \]
-nnoremap <leader>1 :Unite -silent -start-insert menu:git<CR>
-
 " Edit in same path as current buffer
 nnoremap <leader>ew :e <C-R>=expand("%:p:h") . "/" <CR>
 
@@ -561,6 +528,31 @@ let g:syntastic_check_on_wq = 1
 " "Make syntastic stop checking for error all the time
 let g:syntastic_enable_highlighting = 0
 
-
-" nmap <silent> ,ev :e $MYVIMRC<cr>
 nnoremap <leader>ea :e ~/.aliases<cr>
+
+nnoremap <leader>ja :call JSXEncloseReturn()<CR>
+nnoremap <leader>ji :call JSXEachAttributeInLine()<CR>
+nnoremap <leader>je :call JSXExtractPartialPrompt()<CR>
+nnoremap <leader>jc :call JSXChangeTagPrompt()<CR>
+nnoremap vax :call JSXSelectTag()<CR>
+
+" Better omni-completion shortucts
+" nnoremap ^] ^X^]
+" nnoremap ^F ^X^F
+" nnoremap ^D ^X^D
+" nnoremap ^L ^X^L
+
+
+" nnoremap <leader>wi :e <C-R>=expand("%:p:h") . "/" <CR>
+" nnoremap <leader>wi :<C-u>Unite -no-split grep:.:import . :--js<cr>
+" nnoremap <leader>sj :<C-u>Unite -no-split grep:.:--js<cr>
+"
+function! AirlineInit()
+  let g:airline_section_a = airline#section#create(['mode'])
+  let g:airline_section_b = airline#section#create(['branch'])
+  let g:airline_section_y = airline#section#create([''])
+endfunction
+autocmd VimEnter * call AirlineInit()
+
+" Avoid new lines above and below comments to be comments
+set formatoptions-=o
