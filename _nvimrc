@@ -7,8 +7,6 @@ endif
 
 let $BASH_ENV = "~/.aliases"
 
-let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-
 " Required:
 call neobundle#begin(expand('/Users/candres/.vim/bundle'))
 
@@ -46,7 +44,6 @@ NeoBundle 'tpope/vim-repeat'
 " NeoBundle 'tpope/vim-heroku'
 
 NeoBundle 'justinmk/vim-sneak'
-
 
 NeoBundle 'Shougo/vimproc.vim', {
       \ 'build' : {
@@ -104,6 +101,7 @@ NeoBundle 'majutsushi/tagbar'
 NeoBundle 'tsukkee/unite-tag'
 NeoBundle 'osyo-manga/unite-quickfix'
 NeoBundle 'samuelsimoes/vim-jsx-utils'
+" NeoBundle 'othree/yajs.vim'
 
 
 " Required:
@@ -128,7 +126,8 @@ set lazyredraw
 syntax on
 set background=dark
 
-colorscheme base16-default
+colorscheme candres_colors
+" colorscheme base16-default-dark
 " if getcwd() ==# '/Users/candres/src/newmilsi'
 "     colorscheme earthsong-contrast
 " elseif getcwd() ==# '/path/to/other_project'
@@ -329,6 +328,7 @@ au Filetype snippets setl noet
 "Add .md extension as mkrkdown filetype
 autocmd BufRead,BufNewFile  *.md set filetype=markdown
 autocmd BufRead,BufNewFile  *.eslintrc set filetype=json
+autocmd BufRead,BufNewFile  *.*rc set filetype=json
 " autocmd BufRead,BufNewFile  *.ejs set filetype=html
 
 "Prevent instant markdown from starting automatically
@@ -398,9 +398,11 @@ nnoremap <leader>sr :<C-u>Unite -no-split -start-insert file_mru<cr>
 nnoremap <leader>sg :<C-u>Unite -no-split grep:.<cr>
 
 " si: search in...
-nnoremap <leader>si :<C-u>Unite -no-split grep:<cr>
+" nnoremap <leader>si :<C-u>Unite -no-split grep:<cr>
+nnoremap <leader>si :<C-u>Unite -input=import -start-insert -no-split grep:.:--js<cr>
 
 " sa: search again (resume lst Unite command)
+" Will not work with any unite commands that have the 'wipe' option
 nnoremap <leader>sa :<C-u>UniteResume<cr>
 
 " sj: search only javascript files

@@ -97,7 +97,7 @@ highlight MatchParen                guifg=#FFFFFF ctermfg=15 guibg=#005f5f cterm
 
 " Allows to color a column differently (used for suggesting
 " that a line might be too long)
-" highlight ColorColumn               guibg=#e6e1dc ctermbg=235
+highlight ColorColumn               guibg=#e6e1dc ctermbg=235
 
 " Hilight color for special chars (like end-of-line spaces, soft tabs, etc)
 highlight SpecialKey                guifg=#e6e1dc ctermfg=236
