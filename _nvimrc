@@ -41,7 +41,6 @@ NeoBundle 'tpope/vim-unimpaired'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'tpope/vim-repeat'
 " NeoBundle 'tpope/vim-rails'
-" NeoBundle 'tpope/vim-heroku'
 
 NeoBundle 'justinmk/vim-sneak'
 
@@ -374,6 +373,7 @@ call unite#filters#sorter_default#use(['sorter_selecta'])
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
 
 nnoremap <leader>f :<C-u>Unite -no-split -start-insert file_rec/neovim:!<cr>
+nnoremap <leader>x :<C-u>UniteWithCursorWord -no-split -start-insert file_rec/neovim:!<cr>
 nnoremap <leader>F :<C-u>Unite -no-split -start-insert file<cr>
 nnoremap <leader>r :<C-u>Unite -no-split -start-insert file_mru<cr>
 nnoremap <leader>b :<C-u>Unite -no-split -start-insert buffer<cr>
@@ -382,7 +382,7 @@ nnoremap <leader>m :<C-u>Unite -no-split mark<cr>
 " nnoremap <leader>j :<C-u>Unite -no-split jump<cr>
 
 " Limit recent files list to 10
-call unite#custom#source('file_mru', 'max_candidates' , 10 )
+call unite#custom#source('file_mru', 'max_candidates' , 15 )
 
 " List colors schemes
 nnoremap <leader>lc :<C-u>Unite -no-split colorscheme<cr>
