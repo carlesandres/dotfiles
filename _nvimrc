@@ -78,6 +78,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'ujihisa/unite-colorscheme'
 Plug 'w0rp/ale'
 
+" Plug 'AndrewRadev/switch.vim'
 Plug 'chriskempson/base16-vim'
 
 " Track the engine.
@@ -361,7 +362,7 @@ endif
 
 let g:denite_source_history_yank_enable = 1
 
-" call denite#custom#option('_', 'split', 'no')
+call denite#custom#option('_', 'split', 'no')
 
 call denite#custom#map('insert', '<ESC>', '<denite:enter_mode:normal>', 'noremap')
 call denite#custom#map('insert', '<Down>', '<denite:move_to_next_line>', 'noremap')
@@ -400,7 +401,7 @@ nnoremap <leader>si :<C-u>Denite -input=import grep:.:--js<cr>
 
 " sa: search again (resume lst Denite command)
 " Will not work with any denite commands that have the 'wipe' option
-nnoremap <leader>sa :<C-u>DeniteResume<cr>
+nnoremap <leader>sa :<C-u>Denite -resume<cr>
 
 " sj: search only javascript files
 nnoremap <leader>sj :<C-u>Denite grep:.:--js<cr>
@@ -561,3 +562,8 @@ set formatoptions-=o
 
 " See https://bluz71.github.io/2017/06/28/current-treats-future-wants-of-neovim.html
 noremap <C-q> :confirm qall<CR>
+
+map f <Plug>Sneak_f
+map F <Plug>Sneak_F
+map t <Plug>Sneak_t
+map T <Plug>Sneak_T
