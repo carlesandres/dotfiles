@@ -69,6 +69,7 @@ Plug 'terryma/vim-multiple-cursors'
 Plug 'airblade/vim-gitgutter'
 Plug 'ujihisa/unite-colorscheme'
 Plug 'w0rp/ale'
+Plug 'ap/vim-css-color'
 
 " Plug 'AndrewRadev/switch.vim'
 Plug 'chriskempson/base16-vim'
@@ -90,6 +91,7 @@ Plug 'alampros/vim-styled-jsx'
 Plug 'ryanoasis/vim-devicons'
 " Plug 'Chiel92/vim-autoformat'
 " Plug 'othree/yajs.vim'
+
 
 " Initialize plugin system
 call plug#end()
@@ -264,7 +266,9 @@ map <leader>p :set invpaste paste?<CR>
 " Remap :W to :w
 " command W w
 
-" let g:UltiSnipsUsePythonVersion = 2
+set runtimepath+=~/src/dotfiles/snippets
+let g:UltiSnipsSnippetsDir="~/src/dotfiles/snippets"
+
 let g:UltiSnipsListSnippets = '<c-g>'
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
