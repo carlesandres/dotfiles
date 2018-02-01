@@ -1,0 +1,16 @@
+snippet lv "Log variable" b
+console.log('$1', $1);
+endsnippet
+
+snippet bm "bind method" b
+this.$1 = this.$1.bind(this);
+endsnippet
+
+snippet gfp "get from props" b
+const { $1 } = this.props;
+endsnippet
+
+snippet gfs "get from state" b
+const { $1 } = this.state;
+endsnippet
+
