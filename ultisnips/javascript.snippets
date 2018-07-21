@@ -14,3 +14,74 @@ snippet gfs "get from state" b
 const { $1 } = this.state;
 endsnippet
 
+snippet lo "log object" b
+console.log('$1', JSON.stringify($1, null, ' '));
+endsnippet
+
+snippet td "TO-DO note" b
+// TO-DO: $1
+endsnippet
+
+snippet rc "react constructor" b
+constructor(props) {
+	super(props);
+
+	$1;
+}
+endsnippet
+
+snippet cwrp "componentWillReceiveProps" b
+componentWillReceiveProps(){
+	$1
+}
+endsnippet
+
+snippet rcc "react class component" b
+class $1 extends React.Component {
+	constructor(props) {
+		super(props);
+		$2
+	}
+
+	render() {
+		$3
+	}
+}
+
+export default $1;
+endsnippet
+
+snippet clv "coloured log var" b
+console.log('%c%s', 'color: red;', '$1', $1);
+endsnippet
+
+snippet src "stateless react component" b
+const $1 = (props) => {
+	return (
+		<div>
+			$2
+		</div>
+	);
+};
+
+export default $1;
+endsnippet
+
+snippet stl "styled jsx" b
+<style jsx$1>{\`
+	$2
+\`}</style>
+endsnippet
+
+snippet ic "import component"
+import $1 from 'components/$1';
+endsnippet
+
+snippet ss "single-line setState" b
+this.setState({ $1: $2 });
+endsnippet
+
+snippet cle "console.log line exception"
+// eslint-disable-line no-console
+endsnippet
+

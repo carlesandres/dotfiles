@@ -20,6 +20,8 @@ call plug#begin('~/.vim/plugged')
 " Plug 'Shougo/neocomplete.vim'
 " Plug 'Shougo/neosnippet.vim'
 " Plug 'Shougo/neosnippet-snippets'
+
+Plug 'morhetz/gruvbox'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-abolish'
@@ -27,6 +29,7 @@ Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-eunuch'
 " Plug 'tpope/vim-rails'
 
 Plug 'justinmk/vim-sneak'
@@ -69,6 +72,8 @@ Plug 'terryma/vim-multiple-cursors'
 Plug 'airblade/vim-gitgutter'
 Plug 'ujihisa/unite-colorscheme'
 Plug 'w0rp/ale'
+Plug 'ruanyl/vim-fixmyjs'
+Plug 'hail2u/vim-css3-syntax'
 Plug 'ap/vim-css-color'
 
 " Plug 'AndrewRadev/switch.vim'
@@ -86,12 +91,15 @@ Plug 'justinmk/vim-sneak'
 Plug 'majutsushi/tagbar'
 " Plug 'tsukkee/unite-tag'
 " Plug 'osyo-manga/unite-quickfix'
-Plug 'samuelsimoes/vim-jsx-utils'
-Plug 'alampros/vim-styled-jsx'
+" Plug 'samuelsimoes/vim-jsx-utils'
+" Plug 'alampros/vim-styled-jsx'
 Plug 'ryanoasis/vim-devicons'
 " Plug 'Chiel92/vim-autoformat'
 " Plug 'othree/yajs.vim'
-
+"
+Plug 'wellle/targets.vim'
+Plug 'alampros/vim-styled-jsx'
+Plug 'dbeniamine/cheat.sh-vim'
 
 " Initialize plugin system
 call plug#end()
@@ -105,7 +113,8 @@ set lazyredraw
 syntax on
 set background=dark
 
-colorscheme candres_colors
+" colorscheme candres_colors
+colorscheme gruvbox
 " colorscheme base16-default-dark
 " if getcwd() ==# '/Users/candres/src/newmilsi'
 "     colorscheme earthsong-contrast
@@ -399,7 +408,7 @@ nnoremap <leader>sg :<C-u>Denite grep:.<cr>
 
 " si: search in...
 " nnoremap <leader>si :<C-u>Denite  grep:<cr>
-nnoremap <leader>si :<C-u>Denite -input=import grep:.:--js<cr>
+nnoremap <leader>si :<C-u>Denite -input=import.* grep:.:--js<cr>
 
 " sa: search again (resume lst Denite command)
 " Will not work with any denite commands that have the 'wipe' option
@@ -461,7 +470,12 @@ let &colorcolumn=join(range(81,999),",")
 let g:gist_detect_filetype = 1
 let g:gist_post_private = 1
 
-noremap <leader>d :bdelete<cr>
+" Delete buffer
+noremap <leader>dd :bdelete<cr>
+noremap <leader>db :bdelete<cr>
+
+" Delete file
+noremap <leader>df :Delete<cr>
 
 "<CR> - remove highlighting after search
 " Other options here: http://stackoverflow.com/questions/657447/vim-clear-last-search-highlighting
@@ -474,6 +488,7 @@ nnoremap <leader>k :exec 'silent !open -a "Google Chrome"'<cr>
 nnoremap <leader>cw :%s/\<<C-r><C-w>\>/
 
 nnoremap <leader>eu :<C-u>UltiSnipsEdit<cr>
+nnoremap <leader>ep :e package.json<cr>
 
 " Disable AutoComplPop.
 " let g:acp_enableAtStartup = 0
@@ -495,6 +510,7 @@ nnoremap <leader>eu :<C-u>UltiSnipsEdit<cr>
 
 " Edit in same path as current buffer
 nnoremap <leader>ew :e <C-R>=expand("%:p:h") . "/" <CR>
+nnoremap <leader>ww :w <C-R>=expand("%:p:h") . "/" <CR>
 
 " Join lines discarding empty spaces
 " nnoremap <leader>jj Jx
@@ -580,3 +596,8 @@ map T <Plug>Sneak_T
 " augroup END
 "
 " set foldlevelstart=99
+
+noremap <Leader>aa :Fixmyjs<CR>
+
+let g:gtfo#terminals = { 'mac': 'iterm' }
+
