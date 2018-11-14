@@ -625,3 +625,9 @@ function! ToggleNuMode()
 endfunction
 " sn => Switch Number
 nnoremap <leader>sn :call ToggleNuMode() <CR>
+
+
+augroup WrapLineInMDFile
+    autocmd!
+    autocmd FileType markdown setlocal wrap
+augroup END
