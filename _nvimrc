@@ -33,6 +33,8 @@ Plug 'tpope/vim-eunuch'
 Plug 'terryma/vim-smooth-scroll'
 " Plug 'tpope/vim-rails'
 
+Plug 'vim-scripts/loremipsum'
+
 Plug 'justinmk/vim-sneak'
 
 Plug 'Shougo/vimproc.vim', {
@@ -103,6 +105,9 @@ Plug 'alampros/vim-styled-jsx'
 Plug 'dbeniamine/cheat.sh-vim'
 Plug 'leafgarland/typescript-vim'
 Plug 'peitalin/vim-jsx-typescript'
+Plug 'avakhov/vim-yaml'
+
+Plug 'neoclide/npm.nvim', {'do' : 'npm install'}
 
 " Initialize plugin system
 call plug#end()
@@ -500,6 +505,7 @@ nnoremap <leader>cw :%s/\<<C-r><C-w>\>/
 
 nnoremap <leader>eu :<C-u>UltiSnipsEdit<cr>
 nnoremap <leader>ep :e package.json<cr>
+nnoremap <leader>ec :e .circleci/config.yml<cr>
 
 " Disable AutoComplPop.
 " let g:acp_enableAtStartup = 0
@@ -615,6 +621,15 @@ let g:gtfo#terminals = { 'mac': 'iterm' }
 
 nnoremap <leader>gu :GundoToggle<CR>
 
+" Global replace word under cursor
+" Search devdocs.io for word under cursor
+function! GlobalReplace()
+	let s:wordUnderCursor = expand("<cword>")
+	let s:cmd =":bufdo :%s/" . s:wordUnderCursor . "/"
+	echo s:cmd
+endfunction
+nnoremap <leader>GR :call GlobalReplace() <CR>
+
 function! ToggleNuMode()
 	if &rnu == 0
 		set rnu
@@ -631,3 +646,5 @@ augroup WrapLineInMDFile
     autocmd!
     autocmd FileType markdown setlocal wrap
 augroup END
+
+
