@@ -372,19 +372,17 @@ call denite#custom#source('file/rec', 'sorters', ['sorter_sublime'])
 " Unite's fuzzy matchers input pattern max length
 let g:denite_matcher_fuzzy_max_input_length = 50
 
-" if executable('ag')
-	let g:denite_source_rec_async_command = ['ag', '--skip-vcs-ignores', '--vimgrep', '--hidden', '-g', '']
-	call denite#custom#var('file/rec', 'command',
-				\ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
-	call denite#custom#var('grep', 'command', ['ag'])
-	call denite#custom#var('grep', 'default_opts', ['-i', '--vimgrep'])
-	call denite#custom#var('grep', 'recursive_opts', [])
-	call denite#custom#var('grep', 'pattern_opt', [])
-	call denite#custom#var('grep', 'separator', ['--'])
-	call denite#custom#var('grep', 'final_opts', [])
-	let g:denite_source_grep_default_opts = '--skip-vcs-ignores --vimgrep --hidden'
-	let g:denite_source_grep_recursive_opt = ''
-" endif
+let g:denite_source_rec_async_command = ['ag', '--skip-vcs-ignores', '--vimgrep', '--hidden', '-g', '']
+call denite#custom#var('file/rec', 'command',
+			\ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
+call denite#custom#var('grep', 'command', ['ag'])
+call denite#custom#var('grep', 'default_opts', ['-i', '--vimgrep'])
+call denite#custom#var('grep', 'recursive_opts', [])
+call denite#custom#var('grep', 'pattern_opt', [])
+call denite#custom#var('grep', 'separator', ['--'])
+call denite#custom#var('grep', 'final_opts', [])
+let g:denite_source_grep_default_opts = '--skip-vcs-ignores --vimgrep --hidden'
+let g:denite_source_grep_recursive_opt = ''
 
 let g:denite_source_history_yank_enable = 1
 
@@ -395,19 +393,19 @@ call denite#custom#map('normal', '<Down>', '<denite:move_to_next_line>', 'norema
 call denite#custom#map('normal', '<Up>', '<denite:move_to_previous_line>', 'noremap')
 
 call denite#custom#option('_', {
-	\ 'auto_resume': 1,
-	\ 'start_filter': 1,
-	\ 'statusline': 1,
-	\ 'smartcase': 1,
-	\ 'vertical_preview': 1,
-	\ 'direction': 'dynamicbottom',
-	\ 'prompt': '❯',
-	\ 'max_dynamic_update_candidates': 50000,
-	\ 'winwidth': &columns,
-	\ 'winheight': &lines / 3,
-	\ 'wincol': 0,
-	\ 'winrow': (&lines - 3) - (&lines / 3),
-	\ })
+			\ 'auto_resume': 1,
+			\ 'start_filter': 1,
+			\ 'statusline': 1,
+			\ 'smartcase': 1,
+			\ 'vertical_preview': 1,
+			\ 'direction': 'dynamicbottom',
+			\ 'prompt': '❯',
+			\ 'max_dynamic_update_candidates': 50000,
+			\ 'winwidth': &columns,
+			\ 'winheight': &lines / 3,
+			\ 'wincol': 0,
+			\ 'winrow': (&lines - 3) - (&lines / 3),
+			\ })
 
 nnoremap <leader>f :<C-u>Denite file/rec<cr>
 nnoremap <leader>F :<C-u>Denite file<cr>
@@ -441,7 +439,7 @@ nnoremap <leader>sr :<C-u>Denite file_mru<cr>
 nnoremap <leader>sg :<C-u>Denite grep:.<cr>
 
 " si: search JS/TypeScript imports
-nnoremap <leader>si :<C-u>Denite -input=(import\|require).* grep:.:--js\ --ts<cr>
+nnoremap <leader>si :<C-u>Denite -input=\(import\\|require\).* -matchers=regexp/matcher -start-filter grep:.:--js\ --ts:!<cr>
 
 " sa: search again (resume lst Denite command)
 " Will not work with any denite commands that have the 'wipe' option
@@ -661,8 +659,8 @@ nnoremap <leader>sn :call ToggleNuMode() <CR>
 
 
 augroup WrapLineInMDFile
-    autocmd!
-    autocmd FileType markdown setlocal wrap
+	autocmd!
+	autocmd FileType markdown setlocal wrap
 augroup END
 
 " As seen on: https://coderwall.com/p/lwvhkw/vimtip-5-treat-dashes-as-part-of-word
@@ -670,10 +668,10 @@ set iskeyword+=-
 
 autocmd FileType denite-filter call s:denite_filter_my_settings()
 function! s:denite_filter_my_settings() abort
-  imap <silent><buffer> <C-o>
-  \ <Plug>(denite_filter_quit)
-  imap <silent><buffer> <Esc> <Plug>(denite_filter_quit)
-  inoremap <silent><buffer><expr> <CR> denite#do_map('do_action')
+	imap <silent><buffer> <C-o>
+				\ <Plug>(denite_filter_quit)
+	imap <silent><buffer> <Esc> <Plug>(denite_filter_quit)
+	inoremap <silent><buffer><expr> <CR> denite#do_map('do_action')
 endfunction
 
 " Define mappings while in denite window
@@ -684,19 +682,19 @@ endfunction
 "   <C-o> or i  - Switch to insert mode inside of filter prompt
 autocmd FileType denite call s:denite_my_settings()
 function! s:denite_my_settings() abort
-  nnoremap <silent><buffer><expr> <CR>
-  \ denite#do_map('do_action')
-  nnoremap <silent><buffer><expr> q
-  \ denite#do_map('quit')
-  nnoremap <silent><buffer><expr> <Esc>
-  \ denite#do_map('quit')
-  nnoremap <silent><buffer><expr> d
-  \ denite#do_map('do_action', 'delete')
-  nnoremap <silent><buffer><expr> p
-  \ denite#do_map('do_action', 'preview')
-  nnoremap <silent><buffer><expr> i
-  \ denite#do_map('open_filter_buffer')
-  nnoremap <silent><buffer><expr> <C-o>
-  \ denite#do_map('open_filter_buffer')
+	nnoremap <silent><buffer><expr> <CR>
+				\ denite#do_map('do_action')
+	nnoremap <silent><buffer><expr> q
+				\ denite#do_map('quit')
+	nnoremap <silent><buffer><expr> <Esc>
+				\ denite#do_map('quit')
+	nnoremap <silent><buffer><expr> d
+				\ denite#do_map('do_action', 'delete')
+	nnoremap <silent><buffer><expr> p
+				\ denite#do_map('do_action', 'preview')
+	nnoremap <silent><buffer><expr> i
+				\ denite#do_map('open_filter_buffer')
+	nnoremap <silent><buffer><expr> <C-o>
+				\ denite#do_map('open_filter_buffer')
 endfunction
 
