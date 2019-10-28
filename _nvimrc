@@ -414,9 +414,11 @@ nnoremap <leader>b :<C-u>Denite buffer<cr>
 nnoremap <leader>y :<C-u>Denite neoyank<cr>
 nnoremap <leader>m :<C-u>Denite mark<cr>
 nnoremap <leader>jj :<C-u>Denite jump<cr>
+nnoremap <leader>sC :<C-u>Denite change<cr>
+
 
 " sF as in 'search this word in filename'
-nnoremap <leader>sF :<C-u>DeniteCursorWord file_rec<cr>
+nnoremap <leader>sF :<C-u>DeniteCursorWord file/rec<cr>
 
 
 " This isn't working as expected
@@ -459,9 +461,6 @@ nnoremap <leader>sH :<C-u>Denite grep::--html<cr>
 
 " sc search only css files
 nnoremap <leader>sc :<C-u>Denite grep:.:--css\ --sass\ --less<cr>
-
-" sc search only css files but on specific folder(s)
-nnoremap <leader>sC :<C-u>Denite grep::--css\ --sass\ --less<cr>
 
 " sx search only sass and less files
 nnoremap <leader>sx :<C-u>Denite grep:.:--sass\ --less<cr>
