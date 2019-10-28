@@ -3,6 +3,7 @@ let $BASH_ENV = "~/.aliases"
 " Set title in iTerm
 set t_ts=^[]1;
 set t_fs=^G
+set termguicolors
 " Set the title of the Terminal to the currently open file
 function! SetTerminalTitle()
 	let titleString = expand('%:t')
@@ -21,6 +22,7 @@ call plug#begin('~/.vim/plugged')
 " Plug 'Shougo/neosnippet.vim'
 " Plug 'Shougo/neosnippet-snippets'
 
+" Plug 'arcticicestudio/nord-vim'
 Plug 'morhetz/gruvbox'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-fugitive'
@@ -94,8 +96,7 @@ Plug 'justinmk/vim-sneak'
 Plug 'majutsushi/tagbar'
 " Plug 'tsukkee/unite-tag'
 " Plug 'osyo-manga/unite-quickfix'
-" Plug 'samuelsimoes/vim-jsx-utils'
-" Plug 'alampros/vim-styled-jsx'
+Plug 'samuelsimoes/vim-jsx-utils'
 Plug 'ryanoasis/vim-devicons'
 " Plug 'Chiel92/vim-autoformat'
 " Plug 'othree/yajs.vim'
@@ -366,29 +367,26 @@ nnoremap <leader>T :TagbarOpenAutoClose<CR>
 nnoremap <leader>cs :%s/\s\+$//<CR>
 
 " Set up some custom ignores
-call denite#custom#source('file_rec', 'sorters', ['sorter_sublime'])
+call denite#custom#source('file/rec', 'sorters', ['sorter_sublime'])
 
 " Unite's fuzzy matchers input pattern max length
 let g:denite_matcher_fuzzy_max_input_length = 50
 
-if executable('ag')
-	" let g:denite_source_rec_async_command = ['ag', '--skip-vcs-ignores', '--vimgrep', '--hidden', '-g', '']
-	call denite#custom#var('file_rec', 'command',
+" if executable('ag')
+	let g:denite_source_rec_async_command = ['ag', '--skip-vcs-ignores', '--vimgrep', '--hidden', '-g', '']
+	call denite#custom#var('file/rec', 'command',
 				\ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
 	call denite#custom#var('grep', 'command', ['ag'])
-	call denite#custom#var('grep', 'default_opts',
-				\ ['-i', '--vimgrep'])
+	call denite#custom#var('grep', 'default_opts', ['-i', '--vimgrep'])
 	call denite#custom#var('grep', 'recursive_opts', [])
 	call denite#custom#var('grep', 'pattern_opt', [])
 	call denite#custom#var('grep', 'separator', ['--'])
 	call denite#custom#var('grep', 'final_opts', [])
 	let g:denite_source_grep_default_opts = '--skip-vcs-ignores --vimgrep --hidden'
 	let g:denite_source_grep_recursive_opt = ''
-endif
+" endif
 
 let g:denite_source_history_yank_enable = 1
-
-" call denite#custom#option('_', 'split', 'no')
 
 call denite#custom#map('insert', '<ESC>', '<denite:enter_mode:normal>', 'noremap')
 call denite#custom#map('insert', '<Down>', '<denite:move_to_next_line>', 'noremap')
@@ -396,17 +394,38 @@ call denite#custom#map('insert', '<Up>', '<denite:move_to_previous_line>', 'nore
 call denite#custom#map('normal', '<Down>', '<denite:move_to_next_line>', 'noremap')
 call denite#custom#map('normal', '<Up>', '<denite:move_to_previous_line>', 'noremap')
 
-nnoremap <leader>f :<C-u>Denite file_rec<cr>
-nnoremap <leader>sx :<C-u>DeniteCursorWord file_rec<cr>
+call denite#custom#option('_', {
+	\ 'auto_resume': 1,
+	\ 'start_filter': 1,
+	\ 'statusline': 1,
+	\ 'smartcase': 1,
+	\ 'vertical_preview': 1,
+	\ 'direction': 'dynamicbottom',
+	\ 'prompt': '❯',
+	\ 'max_dynamic_update_candidates': 50000,
+	\ 'winwidth': &columns,
+	\ 'winheight': &lines / 3,
+	\ 'wincol': 0,
+	\ 'winrow': (&lines - 3) - (&lines / 3),
+	\ })
+
+nnoremap <leader>f :<C-u>Denite file/rec<cr>
 nnoremap <leader>F :<C-u>Denite file<cr>
 nnoremap <leader>r :<C-u>Denite file_mru<cr>
 nnoremap <leader>b :<C-u>Denite buffer<cr>
 nnoremap <leader>y :<C-u>Denite neoyank<cr>
 nnoremap <leader>m :<C-u>Denite mark<cr>
-" nnoremap <leader>j :<C-u>Denite  jump<cr>
+nnoremap <leader>jj :<C-u>Denite jump<cr>
+
+" sF as in 'search this word in filename'
+nnoremap <leader>sF :<C-u>DeniteCursorWord file_rec<cr>
+
+
+" This isn't working as expected
+" nnoremap <leader>ss :<C-u>Denite ultisnips<cr>
 
 " Limit recent files list to 10
-" call denite#custom#source('file_mru', 'max_candidates' , 15 )
+call denite#custom#source('file_mru', 'max_candidates' , 15 )
 
 " List colors schemes
 nnoremap <leader>lc :<C-u>Denite colorscheme<cr>
@@ -421,19 +440,18 @@ nnoremap <leader>sr :<C-u>Denite file_mru<cr>
 " sg: search globally
 nnoremap <leader>sg :<C-u>Denite grep:.<cr>
 
-" si: search in...
-" nnoremap <leader>si :<C-u>Denite  grep:<cr>
-nnoremap <leader>si :<C-u>Denite -input=import.* grep:.:--js<cr>
+" si: search JS/TypeScript imports
+nnoremap <leader>si :<C-u>Denite -input=(import\|require).* grep:.:--js\ --ts<cr>
 
 " sa: search again (resume lst Denite command)
 " Will not work with any denite commands that have the 'wipe' option
 nnoremap <leader>sa :<C-u>Denite -resume<cr>
 
 " sj: search only javascript files
-nnoremap <leader>sj :<C-u>Denite grep:.:--js<cr>
+nnoremap <leader>sj :<C-u>Denite grep:.:--js\ --ts<cr>
 
 " sJ: search only JS files but in specific folders
-nnoremap <leader>sJ :<C-u>Denite grep::--js<cr>
+nnoremap <leader>sJ :<C-u>Denite grep::--js\ --ts<cr>
 
 " sh: search only html files
 nnoremap <leader>sh :<C-u>Denite grep:.:--html<cr>
@@ -451,13 +469,13 @@ nnoremap <leader>sC :<C-u>Denite grep::--css\ --sass\ --less<cr>
 nnoremap <leader>sx :<C-u>Denite grep:.:--sass\ --less<cr>
 
 " sw search globally for word under cursor
-nnoremap <leader>sw :<C-u>DeniteCursorWord grep:. -mode=normal<cr>
+nnoremap <leader>sw :<C-u>DeniteCursorWord grep:.<cr>
+" nnoremap <leader>sw :<C-u>DeniteCursorWord grep:. -mode=normal<cr>
 nnoremap <leader>sW :<C-u>DeniteCursorWord line<cr>
 
 " sc search lines of text
 nnoremap <leader>sl :<C-u>Denite line<cr>
 
-nnoremap <leader>ss :<C-u>Denite ultisnips<cr>
 
 nnoremap <leader>sR :<C-u>Denite directory_mru<cr>
 
@@ -574,7 +592,7 @@ nnoremap <leader>ja :call JSXEncloseReturn()<CR>
 nnoremap <leader>ji :call JSXEachAttributeInLine()<CR>
 nnoremap <leader>je :call JSXExtractPartialPrompt()<CR>
 nnoremap <leader>jc :call JSXChangeTagPrompt()<CR>
-nnoremap vax :call JSXSelectTag()<CR>
+nnoremap vat :call JSXSelectTag()<CR>
 
 " Better omni-completion shortucts
 " nnoremap ^] ^X^]
@@ -647,4 +665,38 @@ augroup WrapLineInMDFile
     autocmd FileType markdown setlocal wrap
 augroup END
 
+" As seen on: https://coderwall.com/p/lwvhkw/vimtip-5-treat-dashes-as-part-of-word
+set iskeyword+=-
+
+autocmd FileType denite-filter call s:denite_filter_my_settings()
+function! s:denite_filter_my_settings() abort
+  imap <silent><buffer> <C-o>
+  \ <Plug>(denite_filter_quit)
+  imap <silent><buffer> <Esc> <Plug>(denite_filter_quit)
+  inoremap <silent><buffer><expr> <CR> denite#do_map('do_action')
+endfunction
+
+" Define mappings while in denite window
+"   <CR>        - Opens currently selected file
+"   q or <Esc>  - Quit Denite window
+"   d           - Delete currenly selected file
+"   p           - Preview currently selected file
+"   <C-o> or i  - Switch to insert mode inside of filter prompt
+autocmd FileType denite call s:denite_my_settings()
+function! s:denite_my_settings() abort
+  nnoremap <silent><buffer><expr> <CR>
+  \ denite#do_map('do_action')
+  nnoremap <silent><buffer><expr> q
+  \ denite#do_map('quit')
+  nnoremap <silent><buffer><expr> <Esc>
+  \ denite#do_map('quit')
+  nnoremap <silent><buffer><expr> d
+  \ denite#do_map('do_action', 'delete')
+  nnoremap <silent><buffer><expr> p
+  \ denite#do_map('do_action', 'preview')
+  nnoremap <silent><buffer><expr> i
+  \ denite#do_map('open_filter_buffer')
+  nnoremap <silent><buffer><expr> <C-o>
+  \ denite#do_map('open_filter_buffer')
+endfunction
 

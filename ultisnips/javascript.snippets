@@ -37,6 +37,12 @@ componentWillReceiveProps(){
 }
 endsnippet
 
+snippet cwu "componentWillUnmount" b
+componentWillUnmount(){
+	$1
+}
+endsnippet
+
 snippet cdu "componentDidUpdate" b
 componentDidUpdate(){
 	$1
@@ -92,3 +98,54 @@ snippet cle "console.log line exception"
 // eslint-disable-line no-console
 endsnippet
 
+snippet sep "separator" b
+console.log('-----------------------------------');
+endsnippet
+
+snippet rj "return jsx" b
+return (
+	$1
+);
+endsnippet
+
+snippet pr "prop propagation" b
+$1={this.props.$1}
+endsnippet
+
+snippet cjse "cjs export" b
+module.exports.$1 = $1;
+endsnippet
+
+snippet exp "module export" b
+module.exports.$1 = $1;
+endsnippet
+
+snippet ace "Allow console statement"
+// eslint-disable-line no-console
+endsnippet
+
+snippet cg "console group" b
+console.group($1);
+endsnippet
+
+snippet cge "console group" b
+console.groupEnd();
+endsnippet
+
+snippet ue "useEffect" b
+useEffect( () => {
+	$1
+}, $2);
+endsnippet
+
+snippet div "div" b
+<div className="$1">$2</div>
+endsnippet
+
+snippet ediv "end div"
+</div>
+endsnippet
+
+snippet lbin "label + input emmet bulma"
+.field>(label.label{$1}+(div.control>input.input))
+endsnippet
