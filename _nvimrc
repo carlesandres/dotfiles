@@ -33,6 +33,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-eunuch'
 Plug 'terryma/vim-smooth-scroll'
+Plug 'wincent/terminus'
 " Plug 'tpope/vim-rails'
 
 Plug 'vim-scripts/loremipsum'
@@ -402,7 +403,7 @@ call denite#custom#option('_', {
 			\ 'prompt': '❯',
 			\ 'max_dynamic_update_candidates': 50000,
 			\ 'winwidth': &columns,
-			\ 'winheight': &lines / 3,
+			\ 'winheight': &lines / 2,
 			\ 'wincol': 0,
 			\ 'winrow': (&lines - 3) - (&lines / 3),
 			\ })
@@ -685,8 +686,8 @@ function! s:denite_my_settings() abort
 				\ denite#do_map('do_action')
 	nnoremap <silent><buffer><expr> q
 				\ denite#do_map('quit')
-	nnoremap <silent><buffer><expr> <Esc>
-				\ denite#do_map('quit')
+	" nnoremap <silent><buffer><expr> <Esc>
+	" 			\ denite#do_map('quit')
 	nnoremap <silent><buffer><expr> d
 				\ denite#do_map('do_action', 'delete')
 	nnoremap <silent><buffer><expr> p

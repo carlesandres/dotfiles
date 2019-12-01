@@ -149,3 +149,11 @@ endsnippet
 snippet lbin "label + input emmet bulma"
 .field>(label.label{$1}+(div.control>input.input))
 endsnippet
+
+snippet np "new promise" b
+const promise = new Promise((resolve, reject) => {
+	$1
+});
+
+return promise;
+endsnippet
