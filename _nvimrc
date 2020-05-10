@@ -59,9 +59,9 @@ Plug 'bling/vim-airline'
 Plug 'gregsexton/gitv'
 
 Plug 'pangloss/vim-javascript'
-Plug 'mxw/vim-jsx'
-Plug 'briancollins/vim-jst'
-Plug 'mustache/vim-mustache-handlebars'
+Plug 'MaxMEllon/vim-jsx-pretty'
+" Plug 'briancollins/vim-jst'
+" Plug 'mustache/vim-mustache-handlebars'
 Plug 'elzr/vim-json'
 
 Plug 'mileszs/ack.vim'
