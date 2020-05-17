@@ -108,7 +108,9 @@ Plug 'haya14busa/vim-textobj-function-syntax'
 
 Plug 'neoclide/npm.nvim', {'do' : 'npm install'}
 
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" TO-DO: Currently deoplete interferes with denite
+" I need to find how to prevent it from running in denite searches
+" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 " Initialize plugin system
 call plug#end()
@@ -133,7 +135,9 @@ colorscheme gruvbox
 "     colorscheme base16-default
 " endif
 
-let g:ackprg = 'ag --nogroup --nocolor --column'
+if executable('ag')
+	let g:ackprg = 'ag --vim-grep --nogroup --nocolor --column'
+endif
 
 let mapleader=","
 
@@ -374,17 +378,18 @@ call denite#custom#source('file/rec', 'sorters', ['sorter_sublime'])
 " Unite's fuzzy matchers input pattern max length
 let g:denite_matcher_fuzzy_max_input_length = 50
 
-let g:denite_source_rec_async_command = ['ag', '--skip-vcs-ignores', '--vimgrep', '--hidden', '-g', '']
+let g:denite_source_rec_async_command = ['ag', '--vimgrep', '--hidden', '-g', '']
 call denite#custom#var('file/rec', 'command',
 			\ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
+
 call denite#custom#var('grep', 'command', ['ag'])
 call denite#custom#var('grep', 'default_opts', ['-i', '--vimgrep'])
 call denite#custom#var('grep', 'recursive_opts', [])
 call denite#custom#var('grep', 'pattern_opt', [])
 call denite#custom#var('grep', 'separator', ['--'])
 call denite#custom#var('grep', 'final_opts', [])
-let g:denite_source_grep_default_opts = '--skip-vcs-ignores --vimgrep --hidden'
-let g:denite_source_grep_recursive_opt = ''
+" let g:denite_source_grep_default_opts = '--skip-vcs-ignores --vimgrep --hidden'
+" let g:denite_source_grep_recursive_opt = ''
 
 let g:denite_source_history_yank_enable = 1
 
@@ -696,9 +701,9 @@ function! s:denite_my_settings() abort
 endfunction
 
 
-let g:deoplete#enable_at_startup = 1
-
-inoremap <silent><expr> <TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" TO-DO: Currently deoplete interferes with denite
+" let g:deoplete#enable_at_startup = 1
+" inoremap <silent><expr> <TAB>  pumvisible() ? '\<C-n>' : '\<TAB>'
 
 let g:ScalpelMap=0
 nmap <leader>cw <Plug>(Scalpel)
