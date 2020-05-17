@@ -53,6 +53,10 @@ Plug 'mattn/emmet-vim'
 " Plug 'mattn/gist-vim'
 
 Plug 'scrooloose/nerdtree'
+
+" TO-DO: Make it work by cjecking this: https://github.com/justinmk/vim-dirvish/issues/154
+" Plug 'justinmk/vim-dirvish'
+
 Plug 'editorconfig/editorconfig-vim'
 Plug 'suan/vim-instant-markdown'
 Plug 'bling/vim-airline'
@@ -75,7 +79,7 @@ Plug 'ruanyl/vim-fixmyjs'
 Plug 'hail2u/vim-css3-syntax'
 Plug 'ap/vim-css-color'
 
-Plug 'chriskempson/base16-vim'
+" Plug 'chriskempson/base16-vim'
 
 " Track the engine.
 Plug 'SirVer/ultisnips'
@@ -108,7 +112,7 @@ Plug 'haya14busa/vim-textobj-function-syntax'
 
 Plug 'neoclide/npm.nvim', {'do' : 'npm install'}
 
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 " Initialize plugin system
 call plug#end()
@@ -213,7 +217,8 @@ nmap <silent> ,sv :so $MYVIMRC<cr>
 
 " from :h zencoding-customize-keymappings
 let g:user_emmet_leader_key='<C-z>'
-" imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
+imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
+
 
 "let g:user_zen_expandabbr_key = '<c-e>'
 " let g:user_emmet_complete_tag = 1
@@ -345,7 +350,6 @@ autocmd BufRead,BufNewFile  *.zshrc set filetype=sh
 let g:instant_markdown_autostart = 0
 
 " Let vim-airline use powerline patched fonts
-" let g:airline#extensions#syntastic#enabled = 1
 let g:airline#extensions#ale = 1
 let g:airline_powerline_fonts = 1
 let g:airline_detect_crypt=0
@@ -376,7 +380,7 @@ let g:denite_matcher_fuzzy_max_input_length = 50
 
 let g:denite_source_rec_async_command = ['ag', '--skip-vcs-ignores', '--vimgrep', '--hidden', '-g', '']
 call denite#custom#var('file/rec', 'command',
-			\ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
+			\ ['ag', '--nocolor', '--skip-vcs-ignores', '--hidden', '--nogroup', '-g', ''])
 call denite#custom#var('grep', 'command', ['ag'])
 call denite#custom#var('grep', 'default_opts', ['-i', '--vimgrep'])
 call denite#custom#var('grep', 'recursive_opts', [])
@@ -417,7 +421,6 @@ nnoremap <leader>y :<C-u>Denite neoyank<cr>
 nnoremap <leader>m :<C-u>Denite mark<cr>
 nnoremap <leader>jj :<C-u>Denite jump<cr>
 nnoremap <leader>sC :<C-u>Denite change<cr>
-
 
 " sF as in 'search this word in filename'
 nnoremap <leader>sF :<C-u>DeniteCursorWord file/rec<cr>
@@ -559,15 +562,13 @@ nnoremap <leader>gs :Gstatus<cr>
 nnoremap <leader>ga :Gwrite<cr>
 "nnoremap <leader>gg :w<cr>:Gwrite<cr>:Gcommit -m 'update'<cr>:Git push<cr><cr>:e<cr>
 
-
-
 nnoremap <Leader>gl :exe "silent Glog -- % <Bar> Denite -no-quit quickfix"<CR>
 
 " Gitv shortcut
 nnoremap <leader>gv :Gitv<cr>
 
 " Edit scheme
-nnoremap <leader>es :e ~/.vim/colors/candres_colors.vim<CR>
+" nnoremap <leader>es :e ~/.vim/colors/candres_colors.vim<CR>
 
 " " Make syntastic check on open and on save
 " let g:syntastic_check_on_open = 1
@@ -696,12 +697,27 @@ function! s:denite_my_settings() abort
 endfunction
 
 
-let g:deoplete#enable_at_startup = 1
-
-inoremap <silent><expr> <TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-
 let g:ScalpelMap=0
 nmap <leader>cw <Plug>(Scalpel)
 " Replace word under cursor (now replaced by scalpel)
 " nnoremap <leader>cw :%s/\<<C-r><C-w>\>/
+
+
+" let g:deoplete#enable_at_startup = 1
+" let g:deoplete_disable_auto_complete=1
+
+" This disables deoplete in denite commands
+" See: https://github.com/Shougo/deoplete.nvim/issues/996
+" But it doesn't seem to deactivate deoplete completely when denite is
+" active
+
+" autocmd FileType denite call s:denite_filter_my_settings()
+" autocmd FileType denite-filter call s:denite_filter_my_settings()
+" function! s:denite_filter_my_settings() abort
+" 	call deoplete#custom#buffer_option('auto_complete', v:false)
+" endfunction
+
+" TO_DO: This is necessary to use deoplete with TAB, but it seems to disable
+" the emmet expansion mapping
+" inoremap <silent><expr> <TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 
