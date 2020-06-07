@@ -415,6 +415,10 @@ nnoremap <leader>sF :<C-u>DeniteCursorWord file/rec<cr>
 " Limit recent files list to 10
 call denite#custom#source('file_mru', 'max_candidates' , 15 )
 
+call denite#custom#source(
+        \ 'file_mru', 'matchers',
+        \ ['matcher_project_files', 'matcher_fuzzy'])
+
 " List colors schemes
 nnoremap <leader>lc :<C-u>Denite colorscheme<cr>
 
