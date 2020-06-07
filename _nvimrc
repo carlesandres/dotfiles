@@ -231,16 +231,7 @@ noremap <silent> <Space> :call smooth_scroll#down(&scroll, 0, 1)<CR>
 noremap <silent> - :call smooth_scroll#up(&scroll, 0, 1)<CR>
 noremap <silent> + :call smooth_scroll#down(&scroll, 0, 1)<CR>
 
-" Search devdocs.io for word under cursor
-function! SearchDev()
-	let s:browser = "/usr/bin/open"
-	let s:wordUnderCursor = expand("<cword>")
-	let s:url = "http://devdocs.io/search?q=".s:wordUnderCursor
-	let s:cmd ="silent ! " . s:browser . " " . s:url
-	execute s:cmd
-	redraw!
-endfunction
-map <leader>x :call SearchDev()<CR>
+nmap <leader>x <Plug>(LoupeClearHighlight)
 
 " gist-vim configuration
 " let g:gist_show_privates = 1 " Show my private gists with ':Gist -l'
@@ -374,7 +365,7 @@ let g:denite_source_rec_async_command = ['rg', '--vimgrep', '--hidden', '-g', ''
 " Ag command on grep source
 call denite#custom#var('grep', {
 			\ 'command': ['rg'],
-			\ 'default_opts': ['-i', '--vimgrep', '--no-heading'],
+			\ 'default_opts': ['-i', '--vimgrep'],
 			\ 'recursive_opts': [],
 			\ 'pattern_opt': [],
 			\ 'separator': ['--'],
@@ -434,30 +425,27 @@ nnoremap <leader>lc :<C-u>Denite colorscheme<cr>
 nnoremap <leader>sg :<C-u>Denite grep:.<cr>
 
 " si: search JS/TypeScript imports
-nnoremap <leader>si :<C-u>Denite -input=\(import\\|require\).* -matchers=regexp/matcher -start-filter grep:.:--js\ --ts:!<cr>
-nnoremap <leader>sr :<C-u>Denite -input=\require.* -matchers=regexp/matcher -start-filter grep:.:--js\ --ts:!<cr>
+nnoremap <leader>si :<C-u>Denite -input=\(import\\|require\).* -matchers=regexp/matcher -start-filter grep:.:--type\ js\ --type\ ts:!<cr>
+nnoremap <leader>sr :<C-u>Denite -input=\require.* -matchers=regexp/matcher -start-filter grep:.:--type\ js\ --type\ ts:!<cr>
 
 " sa: search again (resume lst Denite command)
 " Will not work with any denite commands that have the 'wipe' option
 nnoremap <leader>sa :<C-u>Denite -resume<cr>
 
 " sj: search only javascript files
-nnoremap <leader>sj :<C-u>Denite grep:.:--js\ --ts<cr>
+nnoremap <leader>sj :<C-u>Denite grep:.:-tjs\ -tts<cr>
 
 " sJ: search only JS files but in specific folders
-nnoremap <leader>sJ :<C-u>Denite grep::--js\ --ts<cr>
+nnoremap <leader>sJ :<C-u>Denite grep::-tjs\ -tts<cr>
 
 " sh: search only html files
-nnoremap <leader>sh :<C-u>Denite grep:.:--html<cr>
+nnoremap <leader>sh :<C-u>Denite grep:.:-thtml<cr>
 
 " sH: search only html files but inside specific folders
-nnoremap <leader>sH :<C-u>Denite grep::--html<cr>
+nnoremap <leader>sH :<C-u>Denite grep::-thtml<cr>
 
 " sc search only css files
-nnoremap <leader>sc :<C-u>Denite grep:.:--css\ --sass\ --less<cr>
-
-" sx search only sass and less files
-nnoremap <leader>sx :<C-u>Denite grep:.:--sass\ --less<cr>
+nnoremap <leader>sc :<C-u>Denite grep:.:-tcss\ -tless<cr>
 
 " sw search globally for word under cursor
 nnoremap <leader>sw :<C-u>DeniteCursorWord grep:.<cr>
@@ -697,4 +685,4 @@ nmap <leader>cw <Plug>(Scalpel)
 " Replace word under cursor (now replaced by scalpel)
 " nnoremap <leader>cw :%s/\<<C-r><C-w>\>/
 
-nmap P <Plug>(devdocs-under-cursor)
+nmap <leader>K <Plug>(devdocs-under-cursor)
