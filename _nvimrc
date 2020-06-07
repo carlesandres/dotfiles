@@ -30,20 +30,11 @@ Plug 'tpope/vim-eunuch'
 Plug 'terryma/vim-smooth-scroll'
 Plug 'wincent/terminus'
 Plug 'wincent/scalpel'
-" Plug 'tpope/vim-rails'
 
 Plug 'vim-scripts/loremipsum'
 
 Plug 'justinmk/vim-sneak'
 
-" Plug 'Shougo/vimproc.vim', {
-" 			\ 'build' : {
-" 			\     'windows' : 'tools\\update-dll-mingw',
-" 			\     'cygwin' : 'make -f make_cygwin.mak',
-" 			\     'mac' : 'make -f make_mac.mak',
-" 			\     'unix' : 'make -f make_unix.mak',
-" 			\    },
-" 			\ }
 Plug 'Shougo/neomru.vim'
 Plug 'Shougo/denite.nvim'
 Plug 'Shougo/neoyank.vim'
@@ -71,7 +62,7 @@ Plug 'terryma/vim-multiple-cursors'
 Plug 'airblade/vim-gitgutter'
 Plug 'ujihisa/unite-colorscheme'
 Plug 'w0rp/ale'
-Plug 'ruanyl/vim-fixmyjs'
+" Plug 'ruanyl/vim-fixmyjs'
 Plug 'hail2u/vim-css3-syntax'
 Plug 'ap/vim-css-color'
 
@@ -97,8 +88,8 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'wellle/targets.vim'
 Plug 'alampros/vim-styled-jsx'
 " Plug 'dbeniamine/cheat.sh-vim'
-" Plug 'leafgarland/typescript-vim'
-" Plug 'peitalin/vim-jsx-typescript'
+Plug 'leafgarland/typescript-vim'
+Plug 'peitalin/vim-jsx-typescript'
 Plug 'avakhov/vim-yaml'
 
 
@@ -356,6 +347,7 @@ let g:airline_detect_crypt=0
 let g:airline#extensions#tabline#fnamemod = ':p:.'
 
 let g:ale_sign_column_always = 1
+let g:ale_fixers = { 'javascript': ['eslint'], 'css': ['stylelint']}
 
 " VIM Resources
 " http://robots.thoughtbot.com/integrating-vim-into-your-life
@@ -555,9 +547,7 @@ nnoremap <leader>ww :saveas <C-R>=expand("%:p:h") . "/" <CR>
 " nnoremap <leader>jj Jx
 nnoremap <leader>ii gg=G''
 
-
 let g:jsx_ext_required = 0
-" let g:syntastic_javascript_checkers = ['eslint']
 
 " " Fugitive shortcuts
 nnoremap <leader>g :Git
@@ -569,8 +559,6 @@ nnoremap <leader>gr :Gremove<cr>
 nnoremap <leader>gs :Gstatus<cr>
 nnoremap <leader>ga :Gwrite<cr>
 "nnoremap <leader>gg :w<cr>:Gwrite<cr>:Gcommit -m 'update'<cr>:Git push<cr><cr>:e<cr>
-
-
 
 nnoremap <Leader>gl :exe "silent Glog -- % <Bar> Denite -no-quit quickfix"<CR>
 
@@ -638,7 +626,8 @@ map T <Plug>Sneak_T
 "
 " set foldlevelstart=99
 
-noremap <Leader>aa :Fixmyjs<CR>
+" noremap <Leader>aa :Fixmyjs<CR>
+noremap <Leader>aa :ALEFix<CR>
 
 let g:gtfo#terminals = { 'mac': 'iterm' }
 
