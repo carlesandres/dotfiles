@@ -30,6 +30,8 @@ Plug 'tpope/vim-eunuch'
 Plug 'terryma/vim-smooth-scroll'
 Plug 'wincent/terminus'
 Plug 'wincent/scalpel'
+Plug 'wincent/loupe'
+Plug 'rhysd/devdocs.vim'
 
 Plug 'vim-scripts/loremipsum'
 
@@ -57,14 +59,12 @@ Plug 'elzr/vim-json'
 
 Plug 'mileszs/ack.vim'
 Plug 'tomtom/tcomment_vim'
-Plug 'sjl/gundo.vim'
+Plug 'simnalamburt/vim-mundo'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'airblade/vim-gitgutter'
 Plug 'ujihisa/unite-colorscheme'
 Plug 'w0rp/ale'
-" Plug 'ruanyl/vim-fixmyjs'
 Plug 'hail2u/vim-css3-syntax'
-Plug 'ap/vim-css-color'
 
 Plug 'chriskempson/base16-vim'
 
@@ -364,30 +364,22 @@ nnoremap <leader>T :TagbarOpenAutoClose<CR>
 " Remove spaces trailing spaces in lines Mnemonic: change spaces
 nnoremap <leader>cs :%s/\s\+$//<CR>
 
-" Set up some custom ignores
 call denite#custom#source('file/rec', 'sorters', ['sorter_sublime'])
+call denite#custom#var('file/rec', 'command', ['rg', '--files', '--hidden', '--glob', '!.git'])
 
 " Unite's fuzzy matchers input pattern max length
 let g:denite_matcher_fuzzy_max_input_length = 50
-
-let g:denite_source_rec_async_command = ['ag', '--vimgrep', '--hidden', '-g', '']
-" call denite#custom#var('file/rec', 'command',
-" 			\ ['ag', '--hidden', '--follow', '--nocolor', '--nogroup', '-p ~/.ignore', '-g', ''])
-
-call denite#custom#var('file/rec', 'command', ['rg', '--files', '--hidden', '--glob', '!.git'])
-
+let g:denite_source_rec_async_command = ['rg', '--vimgrep', '--hidden', '-g', '']
 
 " Ag command on grep source
 call denite#custom#var('grep', {
-			\ 'command': ['ag'],
-			\ 'default_opts': ['-i', '--vimgrep'],
+			\ 'command': ['rg'],
+			\ 'default_opts': ['-i', '--vimgrep', '--no-heading'],
 			\ 'recursive_opts': [],
 			\ 'pattern_opt': [],
 			\ 'separator': ['--'],
 			\ 'final_opts': [],
 			\ })
-" let g:denite_source_grep_default_opts = '--skip-vcs-ignores --vimgrep --hidden'
-" let g:denite_source_grep_recursive_opt = ''
 
 let g:denite_source_history_yank_enable = 1
 
@@ -632,7 +624,7 @@ noremap <Leader>aa :ALEFix<CR>
 let g:gtfo#terminals = { 'mac': 'iterm' }
 
 
-nnoremap <leader>gu :GundoToggle<CR>
+nnoremap <leader>gu :MundoToggle<CR>
 
 " Global replace word under cursor
 " Search devdocs.io for word under cursor
@@ -704,3 +696,5 @@ let g:ScalpelMap=0
 nmap <leader>cw <Plug>(Scalpel)
 " Replace word under cursor (now replaced by scalpel)
 " nnoremap <leader>cw :%s/\<<C-r><C-w>\>/
+
+nmap P <Plug>(devdocs-under-cursor)
