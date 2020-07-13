@@ -32,7 +32,7 @@ Plug 'wincent/terminus'
 Plug 'wincent/scalpel'
 Plug 'wincent/loupe'
 Plug 'rhysd/devdocs.vim'
-
+Plug 'jremmen/vim-ripgrep'
 Plug 'vim-scripts/loremipsum'
 
 Plug 'justinmk/vim-sneak'
@@ -338,7 +338,7 @@ let g:airline_detect_crypt=0
 let g:airline#extensions#tabline#fnamemod = ':p:.'
 
 let g:ale_sign_column_always = 1
-let g:ale_fixers = { 'javascript': ['eslint'], 'css': ['stylelint']}
+let g:ale_fixers = { 'javascript': ['eslint'], 'typescript': ['eslint'], 'css': ['stylelint']}
 
 " VIM Resources
 " http://robots.thoughtbot.com/integrating-vim-into-your-life
@@ -490,7 +490,7 @@ let g:gist_post_private = 1
 " Delete buffer
 noremap <leader>d :bdelete<cr>
 
-" Delete file
+" Delete file (mnemonic: kill file)
 noremap <leader>kf :Delete<cr>
 
 "<CR> - remove highlighting after search
@@ -619,7 +619,6 @@ let g:gtfo#terminals = { 'mac': 'iterm' }
 nnoremap <leader>gu :MundoToggle<CR>
 
 " Global replace word under cursor
-" Search devdocs.io for word under cursor
 function! GlobalReplace()
 	let s:wordUnderCursor = expand("<cword>")
 	let s:cmd =":bufdo :%s/" . s:wordUnderCursor . "/"
@@ -689,4 +688,42 @@ nmap <leader>cw <Plug>(Scalpel)
 " Replace word under cursor (now replaced by scalpel)
 " nnoremap <leader>cw :%s/\<<C-r><C-w>\>/
 
+" Search devdocs.io for word under cursor
 nmap <leader>K <Plug>(devdocs-under-cursor)
+
+" find pattern in file in working directory
+" gr is unmapped by default
+" Check: https://www.sean.sh/log/finally-a-vim-global-find-replace-that-doesn-t-hurt/
+nnoremap gr :<C-u>Denite grep:.<CR> 
+nnoremap gh :Denite help<CR>
+
+" global find/replace inside working directory
+function! FindReplace()
+  " figure out which directory we're in
+	let dir = expand('%:h')
+  " ask for patterns
+  call inputsave()
+  let find = input('Pattern: ')
+  call inputrestore()
+  let replace = input('Replacement: ')
+  call inputrestore()
+  " are you sure?
+  let confirm = input('WARNING: About to replace ' . find . ' with ' . replace . ' in ' . dir . '/**/* (y/n):')
+  " clear echoed message
+  :redraw
+  if confirm == 'y'
+    " find with rigrep (populate quickfix )
+    :silent exe 'Rg ' . find
+    " use cfdo to substitute on all quickfix files
+    :silent exe 'cfdo %s/' . find . '/' . replace . '/g | update'
+    " close quickfix window
+    :silent exe 'cclose'
+    :echom('Replaced ' . find . ' with ' . replace . ' in all files in ' . dir )
+  else
+    :echom('Find/Replace Aborted :(')
+    return
+  endif
+endfunction
+
+" mnemonic: Search
+:nnoremap <Leader>S :call FindReplace()<CR>
