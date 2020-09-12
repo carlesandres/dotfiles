@@ -1,9 +1,10 @@
-let $BASH_ENV = "~/.aliases"
+set shell=/bin/zsh
+" let $BASH_ENV = "~/.aliases"
 
 " Set title in iTerm
 set t_ts=^[]1;
 set t_fs=^G
-set termguicolors
+
 " Set the title of the Terminal to the currently open file
 function! SetTerminalTitle()
 	let titleString = expand('%:t')
@@ -19,6 +20,7 @@ call plug#begin('~/.vim/plugged')
 
 " Plug 'arcticicestudio/nord-vim'
 Plug 'morhetz/gruvbox'
+" Plug 'sjl/badwolf'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-abolish'
@@ -34,11 +36,17 @@ Plug 'wincent/loupe'
 Plug 'rhysd/devdocs.vim'
 Plug 'jremmen/vim-ripgrep'
 Plug 'vim-scripts/loremipsum'
+Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'kassio/neoterm'
+Plug 'mhinz/neovim-remote'
+" Plug 'junegunn/vim-github-dashboard'
+"   let g:github_dashboard = { 'username': 'carlesandres' }
+
 
 Plug 'justinmk/vim-sneak'
 
 Plug 'Shougo/neomru.vim'
-Plug 'Shougo/denite.nvim'
+Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/neoyank.vim'
 
 " Plug 'mattn/webapi-vim'
@@ -57,14 +65,16 @@ Plug 'MaxMEllon/vim-jsx-pretty'
 " Plug 'mustache/vim-mustache-handlebars'
 Plug 'elzr/vim-json'
 
-Plug 'mileszs/ack.vim'
+" Plug 'mileszs/ack.vim'
+Plug 'wincent/ferret'
 Plug 'tomtom/tcomment_vim'
 Plug 'simnalamburt/vim-mundo'
-Plug 'terryma/vim-multiple-cursors'
+Plug 'mg979/vim-visual-multi'
 Plug 'airblade/vim-gitgutter'
 Plug 'ujihisa/unite-colorscheme'
 Plug 'w0rp/ale'
 Plug 'hail2u/vim-css3-syntax'
+Plug 'ap/vim-css-color'
 
 Plug 'chriskempson/base16-vim'
 
@@ -116,19 +126,9 @@ syntax on
 set background=dark
 
 " colorscheme candres_colors
+let g:gruvbox_contrast_dark = 'hard'
 colorscheme gruvbox
-" colorscheme base16-default-dark
-" if getcwd() ==# '/Users/candres/src/newmilsi'
-"     colorscheme earthsong-contrast
-" elseif getcwd() ==# '/path/to/other_project'
-"     colorscheme ir_black
-" else
-"     colorscheme base16-default
-" endif
-
-if executable('ag')
-	let g:ackprg = 'ag --vim-grep --nogroup --nocolor --column'
-endif
+" colorscheme badwolf
 
 let mapleader=","
 
@@ -344,32 +344,24 @@ let g:ale_fixers = { 'javascript': ['eslint'], 'typescript': ['eslint'], 'css': 
 " http://robots.thoughtbot.com/integrating-vim-into-your-life
 
 " Call TagbarToggle
-nnoremap <leader>t :TagbarToggle<CR>
-nnoremap <leader>T :TagbarOpenAutoClose<CR>
-
-" Faster search and replace (see vimregex.com/#substitute )
-" This currently conflicts with use of semicolon to repeat last fast search
-" noremap ;; :%s:::cg<Left><Left><Left>
-" noremap ;' :%s:::g<Left><Left><Left><Left>
+" nnoremap <leader>t :TagbarToggle<CR>
+" nnoremap <leader>T :TagbarOpenAutoClose<CR>
 
 " Remove spaces trailing spaces in lines Mnemonic: change spaces
 nnoremap <leader>cs :%s/\s\+$//<CR>
 
-call denite#custom#source('file/rec', 'sorters', ['sorter_sublime'])
-call denite#custom#var('file/rec', 'command', ['rg', '--files', '--hidden', '--glob', '!.git'])
+" call denite#custom#source('file/rec', 'sorters', ['sorter_sublime'])
+call denite#custom#var('file/rec', 'command',
+			\ ['rg', '--files', '--hidden', '--glob', '!.git'])
 
-" Unite's fuzzy matchers input pattern max length
-let g:denite_matcher_fuzzy_max_input_length = 50
-let g:denite_source_rec_async_command = ['rg', '--vimgrep', '--hidden', '-g', '']
-
-" Ag command on grep source
+" Inspired by https://github.com/Shougo/shougo-s-github/blob/b6a61308ec5f4723517c715b516ec6d0eb7a46d1/vim/rc/plugins/denite.rc.vim
 call denite#custom#var('grep', {
-			\ 'command': ['rg'],
-			\ 'default_opts': ['-i', '--vimgrep'],
+			\ 'command': ['rg', '--threads', '1'],
 			\ 'recursive_opts': [],
 			\ 'pattern_opt': [],
 			\ 'separator': ['--'],
 			\ 'final_opts': [],
+			\ 'default_opts': ['-i', '--vimgrep', '--no-heading'],
 			\ })
 
 let g:denite_source_history_yank_enable = 1
@@ -399,21 +391,23 @@ nnoremap <leader>f :<C-u>Denite file/rec<cr>
 nnoremap <leader>F :<C-u>Denite file<cr>
 nnoremap <leader>r :<C-u>Denite file_mru<cr>
 nnoremap <leader>b :<C-u>Denite buffer<cr>
-nnoremap <leader>y :<C-u>Denite neoyank<cr>
+nnoremap <leader>B :<C-u>Denite buffer -input=neoterm<cr>
+" nnoremap <leader>y :<C-u>Denite neoyank<cr>
 nnoremap <leader>m :<C-u>Denite mark<cr>
 nnoremap <leader>jj :<C-u>Denite jump<cr>
 nnoremap <leader>sC :<C-u>Denite change<cr>
 
 
 " sF as in 'search this word in filename'
+" This will find the file indicated in import/require statements
 nnoremap <leader>sF :<C-u>DeniteCursorWord file/rec<cr>
-
 
 " This isn't working as expected
 " nnoremap <leader>ss :<C-u>Denite ultisnips<cr>
 
 " Limit recent files list to 10
 call denite#custom#source('file_mru', 'max_candidates' , 15 )
+call denite#custom#source('file/rec', 'max_candidates' , 30 )
 
 call denite#custom#source(
         \ 'file_mru', 'matchers',
@@ -427,6 +421,7 @@ nnoremap <leader>lc :<C-u>Denite colorscheme<cr>
 
 " sg: search globally
 nnoremap <leader>sg :<C-u>Denite grep:.<cr>
+nnoremap gr :<C-u>Denite grep:.<CR> 
 
 " si: search JS/TypeScript imports
 nnoremap <leader>si :<C-u>Denite -input=\(import\\|require\).* -matchers=regexp/matcher -start-filter grep:.:--type\ js\ --type\ ts:!<cr>
@@ -459,8 +454,11 @@ nnoremap <leader>sW :<C-u>DeniteCursorWord line<cr>
 " sc search lines of text
 nnoremap <leader>sl :<C-u>Denite line<cr>
 
-
+" sR search recent directories
 nnoremap <leader>sR :<C-u>Denite directory_mru<cr>
+
+" Search console logs in javascript files
+nnoremap <leader>ssc :<C-u>Denite -input=console.log grep:.:-tjs\ -tts<cr>
 
 " Set the size of the preview window used by fugitive
 " and others
@@ -475,9 +473,7 @@ nnoremap <leader>o :only<cr>
 " react
 " Toogle NERDTree
 nnoremap <leader>nt :NERDTreeToggle<cr>
-nnoremap <leader>nc :NERDTreeFind<cr>
-
-" Don't hide quotes on JSON files
+nnoremap <leader>nc :NERDTreeFind<cr 't hide quotes on JSON files
 let g:vim_json_syntax_conceal = 0
 
 "Add a colored column at column 80
@@ -486,12 +482,6 @@ let &colorcolumn=join(range(81,999),",")
 " Gists
 let g:gist_detect_filetype = 1
 let g:gist_post_private = 1
-
-" Delete buffer
-noremap <leader>d :bdelete<cr>
-
-" Delete file (mnemonic: kill file)
-noremap <leader>kf :Delete<cr>
 
 "<CR> - remove highlighting after search
 " Other options here: http://stackoverflow.com/questions/657447/vim-clear-last-search-highlighting
@@ -550,16 +540,7 @@ nnoremap <Leader>gl :exe "silent Glog -- % <Bar> Denite -no-quit quickfix"<CR>
 nnoremap <leader>gv :Gitv<cr>
 
 " Edit scheme
-nnoremap <leader>es :e ~/.vim/colors/candres_colors.vim<CR>
-
-" " Make syntastic check on open and on save
-" let g:syntastic_check_on_open = 1
-"
-" "Make syntastic not check when quitting
-" let g:syntastic_check_on_wq = 1
-"
-" "Make syntastic stop checking for error all the time
-" let g:syntastic_enable_highlighting = 0
+" nnoremap <leader>es :e ~/.vim/colors/candres_colors.vim<CR>
 
 nnoremap <leader>ez :e ~/.zshrc<cr>
 nnoremap <leader>eo :e ~/.oh-my-zsh<cr>
@@ -577,19 +558,6 @@ nnoremap vat :call JSXSelectTag()<CR>
 " nnoremap ^F ^X^F
 " nnoremap ^D ^X^D
 " nnoremap ^L ^X^L
-
-
-" nnoremap <leader>wi :e <C-R>=expand("%:p:h") . "/" <CR>
-" nnoremap <leader>wi :<C-u>Unite  grep:.:import . :--js<cr>
-" nnoremap <leader>sj :<C-u>Unite  grep:.:--js<cr>
-"
-function! AirlineInit()
-	let g:airline_section_a = airline#section#create(['mode'])
-	let g:airline_section_b = airline#section#create(['branch'])
-	let g:airline_section_c = '%t'
-	let g:airline_section_y = airline#section#create([''])
-endfunction
-autocmd VimEnter * call AirlineInit()
 
 " Avoid new lines above and below comments to be comments
 set formatoptions-=o
@@ -610,7 +578,6 @@ map T <Plug>Sneak_T
 "
 " set foldlevelstart=99
 
-" noremap <Leader>aa :Fixmyjs<CR>
 noremap <Leader>aa :ALEFix<CR>
 
 let g:gtfo#terminals = { 'mac': 'iterm' }
@@ -694,7 +661,6 @@ nmap <leader>K <Plug>(devdocs-under-cursor)
 " find pattern in file in working directory
 " gr is unmapped by default
 " Check: https://www.sean.sh/log/finally-a-vim-global-find-replace-that-doesn-t-hurt/
-nnoremap gr :<C-u>Denite grep:.<CR> 
 nnoremap gh :Denite help<CR>
 
 " global find/replace inside working directory
@@ -720,10 +686,39 @@ function! FindReplace()
     :silent exe 'cclose'
     :echom('Replaced ' . find . ' with ' . replace . ' in all files in ' . dir )
   else
-    :echom('Find/Replace Aborted :(')
+    :echom('Find/Replace Aborted')
     return
   endif
 endfunction
 
 " mnemonic: Search
 :nnoremap <Leader>S :call FindReplace()<CR>
+
+" Close all other buffers
+" Taken from: https://salferrarello.com/vim-close-all-buffers-except-the-current-one/
+command! BufOnly execute '%bdelete|edit #|normal `"'
+
+" TO-DO: This could be done with unite
+" command! BufOld execute '5,$bdelete|edit #|normal `"'
+"
+" Delete current buffer
+noremap <leader>dd :bdelete<cr>
+
+" Delete other (do) buffers
+noremap <leader>do :BufOnly<CR>
+
+
+if has('nvim') 
+	tnoremap <Esc> <C-\><C-n>
+	let $GIT_EDITOR = 'nvr -cc split --remote-wait'
+endif
+
+" Terminal yarn dev
+nnoremap <leader>tyd :<C-u>Texec yarn\ dev<cr>
+" Terminal make test
+nnoremap <leader>tmt :<C-u>Texec make\ test<cr>
+
+
+" npm repo
+:nmap <leader>nr :<C-u>!npm repo <c-r>=expand("<cword>")<cr><cr>
+
