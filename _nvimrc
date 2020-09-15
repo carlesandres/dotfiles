@@ -34,21 +34,18 @@ Plug 'wincent/terminus'
 Plug 'wincent/scalpel'
 Plug 'wincent/loupe'
 Plug 'rhysd/devdocs.vim'
-Plug 'jremmen/vim-ripgrep'
-Plug 'vim-scripts/loremipsum'
 Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'kassio/neoterm'
 Plug 'mhinz/neovim-remote'
-" Plug 'junegunn/vim-github-dashboard'
-"   let g:github_dashboard = { 'username': 'carlesandres' }
+Plug 'junegunn/vim-github-dashboard'
+  let g:github_dashboard = { 'username': 'carlesandres' }
 
+let g:fzf_buffers_jump = 1
+let g:fzf_preview_window=''
+Plug 'junegunn/fzf', {'do': { -> fzf#install() }}
+Plug 'junegunn/fzf.vim'
 
 Plug 'justinmk/vim-sneak'
-
-Plug 'Shougo/neomru.vim'
-Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'Shougo/neoyank.vim'
-
 " Plug 'mattn/webapi-vim'
 Plug 'mattn/emmet-vim'
 " Plug 'mattn/gist-vim'
@@ -61,11 +58,8 @@ Plug 'gregsexton/gitv'
 
 Plug 'pangloss/vim-javascript'
 Plug 'MaxMEllon/vim-jsx-pretty'
-" Plug 'briancollins/vim-jst'
-" Plug 'mustache/vim-mustache-handlebars'
 Plug 'elzr/vim-json'
 
-" Plug 'mileszs/ack.vim'
 Plug 'wincent/ferret'
 Plug 'tomtom/tcomment_vim'
 Plug 'simnalamburt/vim-mundo'
@@ -106,8 +100,6 @@ Plug 'avakhov/vim-yaml'
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-function'
 Plug 'haya14busa/vim-textobj-function-syntax'
-
-Plug 'neoclide/npm.nvim', {'do' : 'npm install'}
 
 " TO-DO: Currently deoplete interferes with denite
 " I need to find how to prevent it from running in denite searches
@@ -350,115 +342,8 @@ let g:ale_fixers = { 'javascript': ['eslint'], 'typescript': ['eslint'], 'css': 
 " Remove spaces trailing spaces in lines Mnemonic: change spaces
 nnoremap <leader>cs :%s/\s\+$//<CR>
 
-" call denite#custom#source('file/rec', 'sorters', ['sorter_sublime'])
-call denite#custom#var('file/rec', 'command',
-			\ ['rg', '--files', '--hidden', '--glob', '!.git'])
-
-" Inspired by https://github.com/Shougo/shougo-s-github/blob/b6a61308ec5f4723517c715b516ec6d0eb7a46d1/vim/rc/plugins/denite.rc.vim
-call denite#custom#var('grep', {
-			\ 'command': ['rg', '--threads', '1'],
-			\ 'recursive_opts': [],
-			\ 'pattern_opt': [],
-			\ 'separator': ['--'],
-			\ 'final_opts': [],
-			\ 'default_opts': ['-i', '--vimgrep', '--no-heading'],
-			\ })
-
-let g:denite_source_history_yank_enable = 1
-
-call denite#custom#map('insert', '<ESC>', '<denite:enter_mode:normal>', 'noremap')
-call denite#custom#map('insert', '<Down>', '<denite:move_to_next_line>', 'noremap')
-call denite#custom#map('insert', '<Up>', '<denite:move_to_previous_line>', 'noremap')
-call denite#custom#map('normal', '<Down>', '<denite:move_to_next_line>', 'noremap')
-call denite#custom#map('normal', '<Up>', '<denite:move_to_previous_line>', 'noremap')
-
-call denite#custom#option('_', {
-			\ 'auto_resume': 1,
-			\ 'start_filter': 1,
-			\ 'statusline': 1,
-			\ 'smartcase': 1,
-			\ 'vertical_preview': 1,
-			\ 'direction': 'dynamicbottom',
-			\ 'prompt': '❯',
-			\ 'max_dynamic_update_candidates': 50000,
-			\ 'winwidth': &columns,
-			\ 'winheight': &lines / 2,
-			\ 'wincol': 0,
-			\ 'winrow': (&lines - 3) - (&lines / 3),
-			\ })
-
-nnoremap <leader>f :<C-u>Denite file/rec<cr>
-nnoremap <leader>F :<C-u>Denite file<cr>
-nnoremap <leader>r :<C-u>Denite file_mru<cr>
-nnoremap <leader>b :<C-u>Denite buffer<cr>
-nnoremap <leader>B :<C-u>Denite buffer -input=neoterm<cr>
-" nnoremap <leader>y :<C-u>Denite neoyank<cr>
-nnoremap <leader>m :<C-u>Denite mark<cr>
-nnoremap <leader>jj :<C-u>Denite jump<cr>
-nnoremap <leader>sC :<C-u>Denite change<cr>
 
 
-" sF as in 'search this word in filename'
-" This will find the file indicated in import/require statements
-nnoremap <leader>sF :<C-u>DeniteCursorWord file/rec<cr>
-
-" This isn't working as expected
-" nnoremap <leader>ss :<C-u>Denite ultisnips<cr>
-
-" Limit recent files list to 10
-call denite#custom#source('file_mru', 'max_candidates' , 15 )
-call denite#custom#source('file/rec', 'max_candidates' , 30 )
-
-call denite#custom#source(
-        \ 'file_mru', 'matchers',
-        \ ['matcher_project_files', 'matcher_fuzzy'])
-
-" List colors schemes
-nnoremap <leader>lc :<C-u>Denite colorscheme<cr>
-
-" no-split allows denite results to take the whole current window
-" no-quit, means that denite won't close as selections are made
-
-" sg: search globally
-nnoremap <leader>sg :<C-u>Denite grep:.<cr>
-nnoremap gr :<C-u>Denite grep:.<CR> 
-
-" si: search JS/TypeScript imports
-nnoremap <leader>si :<C-u>Denite -input=\(import\\|require\).* -matchers=regexp/matcher -start-filter grep:.:--type\ js\ --type\ ts:!<cr>
-nnoremap <leader>sr :<C-u>Denite -input=\require.* -matchers=regexp/matcher -start-filter grep:.:--type\ js\ --type\ ts:!<cr>
-
-" sa: search again (resume lst Denite command)
-" Will not work with any denite commands that have the 'wipe' option
-nnoremap <leader>sa :<C-u>Denite -resume<cr>
-
-" sj: search only javascript files
-nnoremap <leader>sj :<C-u>Denite grep:.:-tjs\ -tts<cr>
-
-" sJ: search only JS files but in specific folders
-nnoremap <leader>sJ :<C-u>Denite grep::-tjs\ -tts<cr>
-
-" sh: search only html files
-nnoremap <leader>sh :<C-u>Denite grep:.:-thtml<cr>
-
-" sH: search only html files but inside specific folders
-nnoremap <leader>sH :<C-u>Denite grep::-thtml<cr>
-
-" sc search only css files
-nnoremap <leader>sc :<C-u>Denite grep:.:-tcss\ -tless<cr>
-
-" sw search globally for word under cursor
-nnoremap <leader>sw :<C-u>DeniteCursorWord grep:.<cr>
-" nnoremap <leader>sw :<C-u>DeniteCursorWord grep:. -mode=normal<cr>
-nnoremap <leader>sW :<C-u>DeniteCursorWord line<cr>
-
-" sc search lines of text
-nnoremap <leader>sl :<C-u>Denite line<cr>
-
-" sR search recent directories
-nnoremap <leader>sR :<C-u>Denite directory_mru<cr>
-
-" Search console logs in javascript files
-nnoremap <leader>ssc :<C-u>Denite -input=console.log grep:.:-tjs\ -tts<cr>
 
 " Set the size of the preview window used by fugitive
 " and others
@@ -473,7 +358,7 @@ nnoremap <leader>o :only<cr>
 " react
 " Toogle NERDTree
 nnoremap <leader>nt :NERDTreeToggle<cr>
-nnoremap <leader>nc :NERDTreeFind<cr 't hide quotes on JSON files
+nnoremap <leader>nc :NERDTreeFind<cr>
 let g:vim_json_syntax_conceal = 0
 
 "Add a colored column at column 80
@@ -531,10 +416,8 @@ nnoremap <leader>gd :Gdiff<cr>
 nnoremap <leader>gp :Git push<cr>
 nnoremap <leader>gr :Gremove<cr>
 nnoremap <leader>gs :Gstatus<cr>
-nnoremap <leader>ga :Gwrite<cr>
+nnoremap <leader>ga :Git add -A <cr>
 "nnoremap <leader>gg :w<cr>:Gwrite<cr>:Gcommit -m 'update'<cr>:Git push<cr><cr>:e<cr>
-
-nnoremap <Leader>gl :exe "silent Glog -- % <Bar> Denite -no-quit quickfix"<CR>
 
 " Gitv shortcut
 nnoremap <leader>gv :Gitv<cr>
@@ -613,39 +496,6 @@ augroup END
 " As seen on: https://coderwall.com/p/lwvhkw/vimtip-5-treat-dashes-as-part-of-word
 set iskeyword+=-
 
-autocmd FileType denite-filter call s:denite_filter_my_settings()
-function! s:denite_filter_my_settings() abort
-	imap <silent><buffer> <C-o>
-				\ <Plug>(denite_filter_quit)
-	imap <silent><buffer> <Esc> <Plug>(denite_filter_quit)
-	inoremap <silent><buffer><expr> <CR> denite#do_map('do_action')
-endfunction
-
-" Define mappings while in denite window
-"   <CR>        - Opens currently selected file
-"   q or <Esc>  - Quit Denite window
-"   d           - Delete currenly selected file
-"   p           - Preview currently selected file
-"   <C-o> or i  - Switch to insert mode inside of filter prompt
-autocmd FileType denite call s:denite_my_settings()
-function! s:denite_my_settings() abort
-	nnoremap <silent><buffer><expr> <CR>
-				\ denite#do_map('do_action')
-	nnoremap <silent><buffer><expr> q
-				\ denite#do_map('quit')
-	" nnoremap <silent><buffer><expr> <Esc>
-	" 			\ denite#do_map('quit')
-	nnoremap <silent><buffer><expr> d
-				\ denite#do_map('do_action', 'delete')
-	nnoremap <silent><buffer><expr> p
-				\ denite#do_map('do_action', 'preview')
-	nnoremap <silent><buffer><expr> i
-				\ denite#do_map('open_filter_buffer')
-	nnoremap <silent><buffer><expr> <C-o>
-				\ denite#do_map('open_filter_buffer')
-endfunction
-
-
 " TO-DO: Currently deoplete interferes with denite
 " let g:deoplete#enable_at_startup = 1
 " inoremap <silent><expr> <TAB>  pumvisible() ? '\<C-n>' : '\<TAB>'
@@ -658,10 +508,6 @@ nmap <leader>cw <Plug>(Scalpel)
 " Search devdocs.io for word under cursor
 nmap <leader>K <Plug>(devdocs-under-cursor)
 
-" find pattern in file in working directory
-" gr is unmapped by default
-" Check: https://www.sean.sh/log/finally-a-vim-global-find-replace-that-doesn-t-hurt/
-nnoremap gh :Denite help<CR>
 
 " global find/replace inside working directory
 function! FindReplace()
@@ -717,8 +563,48 @@ endif
 nnoremap <leader>tyd :<C-u>Texec yarn\ dev<cr>
 " Terminal make test
 nnoremap <leader>tmt :<C-u>Texec make\ test<cr>
+nnoremap <leader>to :<C-u>Topen<cr>
 
 
 " npm repo
 :nmap <leader>nr :<C-u>!npm repo <c-r>=expand("<cword>")<cr><cr>
 
+command! -bang -nargs=* JSFiles
+  \ call fzf#vim#grep(
+  \   'rg --column -t js --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
+  \  <bang>0)
+
+command! -bang -nargs=* CSSFiles
+  \ call fzf#vim#grep(
+  \   'rg --column -t css --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
+  \  <bang>0)
+
+nnoremap <silent> <leader>hh :History:<cr>
+nnoremap <silent> <leader>b :Buffers<cr>
+nnoremap <silent> <leader>f :GFiles<cr>
+nnoremap <silent> <leader>r :History<cr>
+nnoremap <silent> <leader>t :Tags<cr>
+nnoremap <silent> <leader>x :exe "Files ".expand("%:p:h")<cr>
+nnoremap <silent> <leader>sl :BLines<cr>
+nnoremap <silent> <leader>sL :Lines<cr>
+nnoremap <silent> <leader>: :Commands<cr>
+nnoremap <silent> <leader>m :Marks<cr>
+nnoremap <silent> <leader>M :Maps<cr>
+nnoremap <silent> <leader>sw :exe "BLines ".expand('<cword>')<cr>
+nnoremap <silent> <leader>sW :exe "Rg ".expand('<cword>')<cr>
+nnoremap <leader>sg :RG<CR>
+nnoremap <silent> <leader>sf :GFiles<cr>
+nnoremap <silent> <leader>sj :JSFiles<CR>
+nnoremap <silent> <leader>sc :CSSFiles<CR>
+nnoremap <silent> <leader>ss :Snippets<CR>
+
+" Quick terminal exit.
+" Partly btained from https://github.com/sQVe/dotfiles/blob/f9a51f14f7c4b6a9c41345c213927813f0d06768/config/nvim/autocmd.vim
+augroup QuickTerminalExit
+  autocmd!
+  autocmd! FileType fzf tnoremap <buffer> <Esc> <C-c>
+" The next line is mine and I am sooooo proud!!
+  autocmd! FileType fzf nnoremap <silent> q :q<cr>
+augroup END
+
+let NERDTreeShowHidden=1
