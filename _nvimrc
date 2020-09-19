@@ -37,15 +37,16 @@ Plug 'rhysd/devdocs.vim'
 Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'kassio/neoterm'
 Plug 'mhinz/neovim-remote'
-Plug 'junegunn/vim-github-dashboard'
-  let g:github_dashboard = { 'username': 'carlesandres' }
+" Plug 'junegunn/vim-github-dashboard'
+  " let g:github_dashboard = { 'username': 'carlesandres' }
+  "
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 let g:fzf_buffers_jump = 1
 let g:fzf_preview_window=''
 Plug 'junegunn/fzf', {'do': { -> fzf#install() }}
 Plug 'junegunn/fzf.vim'
 
-Plug 'justinmk/vim-sneak'
 " Plug 'mattn/webapi-vim'
 Plug 'mattn/emmet-vim'
 " Plug 'mattn/gist-vim'
@@ -54,15 +55,14 @@ Plug 'scrooloose/nerdtree'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'suan/vim-instant-markdown'
 Plug 'bling/vim-airline'
-Plug 'gregsexton/gitv'
+" Plug 'gregsexton/gitv'
 
 Plug 'pangloss/vim-javascript'
 Plug 'MaxMEllon/vim-jsx-pretty'
 Plug 'elzr/vim-json'
 
-Plug 'wincent/ferret'
 Plug 'tomtom/tcomment_vim'
-Plug 'simnalamburt/vim-mundo'
+" Plug 'simnalamburt/vim-mundo'
 Plug 'mg979/vim-visual-multi'
 Plug 'airblade/vim-gitgutter'
 Plug 'ujihisa/unite-colorscheme'
@@ -70,7 +70,7 @@ Plug 'w0rp/ale'
 Plug 'hail2u/vim-css3-syntax'
 Plug 'ap/vim-css-color'
 
-Plug 'chriskempson/base16-vim'
+" Plug 'chriskempson/base16-vim'
 
 " Track the engine.
 Plug 'SirVer/ultisnips'
@@ -100,10 +100,6 @@ Plug 'avakhov/vim-yaml'
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-function'
 Plug 'haya14busa/vim-textobj-function-syntax'
-
-" TO-DO: Currently deoplete interferes with denite
-" I need to find how to prevent it from running in denite searches
-" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 " Initialize plugin system
 call plug#end()
@@ -191,9 +187,6 @@ nmap <silent> ,ev :e $MYVIMRC<cr>
 " 's'ource 'v'imrc)
 nmap <silent> ,sv :so $MYVIMRC<cr>
 
-" nmap <leader>as ! source ~/.aliases<cr>
-" nnoremap <leader>V :VimShell<cr>
-
 " Use emmet only for html and css files
 " let g:user_emmet_install_global = 0
 " autocmd FileType html,css EmmetInstall
@@ -211,14 +204,6 @@ imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
 " \  }
 " \}
 "
-" space = pagedown, - = pageup
-noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 0, 2)<CR>
-noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 0, 2)<CR>
-noremap <silent> <c-b> :call smooth_scroll#up(&scroll*2, 0, 4)<CR>
-noremap <silent> <c-f> :call smooth_scroll#down(&scroll*2, 0, 4)<CR>
-" nnoremap <Space> <PageDown>
-" noremap + <PageDown>
-" noremap - <PageUp>
 noremap <silent> <Space> :call smooth_scroll#down(&scroll, 0, 1)<CR>
 noremap <silent> - :call smooth_scroll#up(&scroll, 0, 1)<CR>
 noremap <silent> + :call smooth_scroll#down(&scroll, 0, 1)<CR>
@@ -231,10 +216,6 @@ nmap <leader>x <Plug>(LoupeClearHighlight)
 
 " Quickly switch to previous buffer
 nnoremap <leader><leader> <c-^>
-
-"USeful shortcuts for searching and replacing
-"noremap ;; :%s:::g<Left><Left><Left>
-"noremap ;' :%s:::cg<Left><Left><Left><Left>
 
 set splitright
 set splitbelow
@@ -330,7 +311,12 @@ let g:airline_detect_crypt=0
 let g:airline#extensions#tabline#fnamemod = ':p:.'
 
 let g:ale_sign_column_always = 1
-let g:ale_fixers = { 'javascript': ['eslint'], 'typescript': ['eslint'], 'css': ['stylelint']}
+let g:ale_fixers = {
+	\'*': ['remove_trailing_lines', 'trim_whitespace'],
+	\'javascript': ['eslint'],
+	\'typescript': ['eslint'],
+	\'css': ['stylelint'],
+	\}
 
 " VIM Resources
 " http://robots.thoughtbot.com/integrating-vim-into-your-life
@@ -341,9 +327,6 @@ let g:ale_fixers = { 'javascript': ['eslint'], 'typescript': ['eslint'], 'css': 
 
 " Remove spaces trailing spaces in lines Mnemonic: change spaces
 nnoremap <leader>cs :%s/\s\+$//<CR>
-
-
-
 
 " Set the size of the preview window used by fugitive
 " and others
@@ -379,24 +362,6 @@ nnoremap <leader>cc :exec 'silent !open -a "Google Chrome"'<cr>
 nnoremap <leader>eu :<C-u>UltiSnipsEdit<cr>
 nnoremap <leader>ep :e package.json<cr>
 nnoremap <leader>ec :e .circleci/config.yml<cr>
-
-" Disable AutoComplPop.
-" let g:acp_enableAtStartup = 0
-" Use neocomplete.
-" let g:neocomplete#enable_at_startup = 1
-" Use smartcase.
-" let g:neocomplete#enable_smart_case = 1
-" Set minimum syntax keyword length.
-" let g:neocomplete#sources#syntax#min_keyword_length = 3
-
-" Examples of using the Ultisnips with unite function
-" function! UltiSnipsCallUnite()
-" Unite -start-insert -winheight=100 -immediately -no-empty ultisnips
-" return ''
-" endfunction
-
-" inoremap <silent> <F12> <C-R>=(pumvisible()? "\<LT>C-E>":"")<CR><C-R>=UltiSnipsCallUnite()<CR>
-" nnoremap <silent> <F12> a<C-R>=(pumvisible()? "\<LT>C-E>":"")<CR><C-R>=UltiSnipsCallUnite()<CR>
 
 " Edit in same path as current buffer
 nnoremap <leader>ew :e <C-R>=expand("%:p:h") . "/" <CR>
@@ -448,10 +413,10 @@ set formatoptions-=o
 " See https://bluz71.github.io/2017/06/28/current-treats-future-wants-of-neovim.html
 noremap <C-q> :confirm qall<CR>
 
-map f <Plug>Sneak_f
-map F <Plug>Sneak_F
-map t <Plug>Sneak_t
-map T <Plug>Sneak_T
+" map f <Plug>Sneak_f
+" map F <Plug>Sneak_F
+" map t <Plug>Sneak_t
+" map T <Plug>Sneak_T
 
 "  Folding JS
 " augroup javascript_folding
@@ -497,7 +462,10 @@ augroup END
 set iskeyword+=-
 
 " TO-DO: Currently deoplete interferes with denite
-" let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_at_startup = 1
+call deoplete#custom#option('sources', {
+\ '_': ['ale', 'buffer'],
+\})
 " inoremap <silent><expr> <TAB>  pumvisible() ? '\<C-n>' : '\<TAB>'
 
 let g:ScalpelMap=0
@@ -554,7 +522,7 @@ noremap <leader>dd :bdelete<cr>
 noremap <leader>do :BufOnly<CR>
 
 
-if has('nvim') 
+if has('nvim')
 	tnoremap <Esc> <C-\><C-n>
 	let $GIT_EDITOR = 'nvr -cc split --remote-wait'
 endif
@@ -584,15 +552,18 @@ nnoremap <silent> <leader>b :Buffers<cr>
 nnoremap <silent> <leader>f :GFiles<cr>
 nnoremap <silent> <leader>r :History<cr>
 nnoremap <silent> <leader>t :Tags<cr>
-nnoremap <silent> <leader>x :exe "Files ".expand("%:p:h")<cr>
+" Files in current dir
+nnoremap <silent> <leader>sx :exe "Files ".expand("%:p:h")<cr>
 nnoremap <silent> <leader>sl :BLines<cr>
 nnoremap <silent> <leader>sL :Lines<cr>
 nnoremap <silent> <leader>: :Commands<cr>
+nnoremap <silent> <leader>y :Registers<cr>
 nnoremap <silent> <leader>m :Marks<cr>
 nnoremap <silent> <leader>M :Maps<cr>
-nnoremap <silent> <leader>sw :exe "BLines ".expand('<cword>')<cr>
-nnoremap <silent> <leader>sW :exe "Rg ".expand('<cword>')<cr>
-nnoremap <leader>sg :RG<CR>
+nnoremap <silent> <leader>sW :exe "BLines ".expand('<cword>')<cr>
+nnoremap <silent> <leader>sw :exe "Rg ".expand('<cword>')<cr>
+nnoremap <silent> <leader>si :exe "Rg import".expand('<cword>')<cr>
+nnoremap <silent> <leader>sg :Rg<CR>
 nnoremap <silent> <leader>sf :GFiles<cr>
 nnoremap <silent> <leader>sj :JSFiles<CR>
 nnoremap <silent> <leader>sc :CSSFiles<CR>
@@ -608,3 +579,23 @@ augroup QuickTerminalExit
 augroup END
 
 let NERDTreeShowHidden=1
+
+"Taken from: https://github.com/junegunn/fzf.vim/issues/647
+function! s:get_registers() abort
+  redir => l:regs
+  silent registers
+  redir END
+
+  return split(l:regs, '\n')[1:]
+endfunction
+
+function! s:registers(...) abort
+  let l:opts = {
+        \ 'source': s:get_registers(),
+        \ 'sink': {x -> feedkeys(matchstr(x, '\v^\S+\ze.*') . (a:1 ? 'P' : 'p'), 'x')},
+        \ 'options': '--prompt="Reg> "'
+        \ }
+  call fzf#run(fzf#wrap(l:opts))
+endfunction
+
+command! -bang Registers call s:registers('<bang>' ==# '!')
