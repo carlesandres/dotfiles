@@ -31,6 +31,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-eunuch'
 Plug 'terryma/vim-smooth-scroll'
+Plug 'yardnsm/vim-import-cost', { 'do': 'npm install' }
 
 let g:FerretMap = 0
 Plug 'wincent/ferret'
@@ -71,7 +72,6 @@ Plug 'ujihisa/unite-colorscheme'
 Plug 'w0rp/ale'
 Plug 'hail2u/vim-css3-syntax'
 Plug 'ap/vim-css-color'
-
 
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
@@ -303,7 +303,7 @@ let g:ale_sign_column_always = 1
 let g:ale_fixers = {
 	\'*': ['remove_trailing_lines', 'trim_whitespace'],
 	\'javascript': ['eslint'],
-	\'typescript': ['eslint'],
+	\'typescript': ['tslint'],
 	\'css': ['stylelint'],
 	\}
 
@@ -366,7 +366,7 @@ let g:jsx_ext_required = 0
 nnoremap <leader>g :Git
 nnoremap <leader>gb :Gblame<cr>
 nnoremap <leader>gc :Gcommit<cr>
-nnoremap <leader>gd :Gdiff<cr>
+nnoremap <leader>gd :Gvdiff<cr>
 nnoremap <leader>gpp :Git push<cr>
 nnoremap <leader>gpr :Git pull-request -p<cr>
 nnoremap <leader>gr :Gremove<cr>
@@ -456,6 +456,7 @@ call deoplete#custom#option('sources', {
 " From: https://github.com/Shougo/deoplete.nvim/issues/816
 " inoremap <silent><expr> <TAB>  pumvisible() ? '\<C-n>' : '\<TAB>'
 
+
 let g:ScalpelMap=0
 nmap <leader>cw <Plug>(Scalpel)
 " Replace word under cursor (now replaced by scalpel)
@@ -522,7 +523,7 @@ command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-hea
 
 command! -bang -nargs=* JSFiles
   \ call fzf#vim#grep(
-  \   'rg --column -t js --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'},
+  \   'rg --column -t js -t ts --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'},
   \  <bang>0)
 
 command! -bang -nargs=* CSSFiles
@@ -532,7 +533,8 @@ command! -bang -nargs=* CSSFiles
 
 nnoremap <silent> <leader>hh :History:<cr>
 nnoremap <silent> <leader>b :Buffers<cr>
-nnoremap <silent> <leader>f :GFiles<cr>
+nnoremap <leader>f :GFiles<cr>
+" nnoremap <silent> <leader>f :GFiles<cr>
 nnoremap <silent> <leader>F :Files<cr>
 nnoremap <silent> <leader>r :History<cr>
 nnoremap <silent> <leader>t :Tags<cr>
@@ -553,7 +555,7 @@ nnoremap <silent> <leader>sf :GFiles<cr>
 nnoremap <silent> <leader>sj :JSFiles<CR>
 nnoremap <silent> <leader>sc :CSSFiles<CR>
 nnoremap <silent> <leader>sss :Snippets<CR>
-nnoremap <silent> <leader>ssc :Lines 'console.log<CR>
+nnoremap <silent> <leader>ssc :exe "BLines console"<cr>
 
 " mnemoni pluginstall
 nnoremap <silent> <leader>pi :PlugInstall<CR>
@@ -590,4 +592,10 @@ endfunction
 
 command! -bang Registers call s:registers('<bang>' ==# '!')
 
-
+" Put this in your .vimrc
+augroup import_cost_auto_run
+  autocmd!
+  " autocmd InsertLeave *.js,*.jsx,*.ts,*.tsx ImportCost
+  " autocmd BufEnter *.js,*.jsx,*.ts,*.tsx ImportCost
+  autocmd CursorHold *.js,*.jsx,*.ts,*.tsx ImportCost
+augroup END
