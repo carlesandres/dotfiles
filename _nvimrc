@@ -5,21 +5,8 @@ set shell=/bin/zsh
 set t_ts=^[]1;
 set t_fs=^G
 
-" Set the title of the Terminal to the currently open file
-function! SetTerminalTitle()
-	let titleString = expand('%:t')
-	if len(titleString) > 0
-		let &titlestring = expand('%:t')
-		set title
-	endif
-endfunction
-autocmd BufEnter * call SetTerminalTitle()
-
-
 call plug#begin('~/.vim/plugged')
 
-" Plug 'arcticicestudio/nord-vim'
-" Plug 'sjl/badwolf'
 Plug 'morhetz/gruvbox'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-fugitive'
@@ -33,7 +20,7 @@ Plug 'tpope/vim-eunuch'
 Plug 'terryma/vim-smooth-scroll'
 " Plug 'yardnsm/vim-import-cost', { 'do': 'npm install' }
 
-Plug 'posva/vim-vue'
+Plug 'posva/vim-vue', { 'for': 'vue' }
 
 let g:FerretMap = 0
 Plug 'wincent/ferret'
@@ -41,11 +28,8 @@ Plug 'wincent/terminus'
 Plug 'wincent/scalpel'
 Plug 'wincent/loupe'
 "
-" Plug 'rhysd/devdocs.vim'
-Plug 'nvim-treesitter/nvim-treesitter'
-" Plug 'junegunn/vim-github-dashboard'
-  " let g:github_dashboard = { 'username': 'carlesandres' }
-  "
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
+
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 let g:fzf_buffers_jump = 1
@@ -57,7 +41,6 @@ Plug 'junegunn/fzf.vim'
 let g:user_emmet_leader_key='<C-z>'
 Plug 'mattn/emmet-vim'
 
-" Plug 'scrooloose/nerdtree'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'suan/vim-instant-markdown'
 Plug 'bling/vim-airline'
@@ -66,23 +49,15 @@ Plug 'pangloss/vim-javascript'
 Plug 'MaxMEllon/vim-jsx-pretty'
 Plug 'elzr/vim-json', { 'for': 'json' }
 
-" Plug 'simnalamburt/vim-mundo'
 Plug 'tomtom/tcomment_vim'
 Plug 'mg979/vim-visual-multi'
-" Plug 'airblade/vim-gitgutter'
-" Plug 'ujihisa/unite-colorscheme'
-Plug 'w0rp/ale'
 Plug 'hail2u/vim-css3-syntax'
 
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 
-" Plug 'vim-scripts/closetag.vim'
 Plug 'justinmk/vim-sneak'
-" Plug 'majutsushi/tagbar'
-" Plug 'samuelsimoes/vim-jsx-utils'
 Plug 'ryanoasis/vim-devicons'
-" Plug 'Chiel92/vim-autoformat'
 
 Plug 'wellle/targets.vim'
 Plug 'alampros/vim-styled-jsx'
@@ -107,14 +82,11 @@ set lazyredraw
 syntax on
 set background=dark
 
-" colorscheme candres_colors
 let g:gruvbox_contrast_dark = 'hard'
 colorscheme gruvbox
-" colorscheme badwolf
 
 let mapleader=","
 
-set nocompatible "Forget being compatible with good ol'vi
 filetype plugin indent on " enable file-type-specific plugins and indentation.
 set ruler "Show ruler
 set nu "Show line numbers
@@ -126,7 +98,7 @@ set relativenumber
 set list "Show invisible characters
 set listchars=tab:▸\ ,trail:•,extends:❯,precedes:❮
 set showbreak=↪\
-set nojoinspaces                  " Use only 1 space after "." when joining lines, not 2
+set nojoinspaces " Use only 1 space after "." when joining lines, not 2
 
 "set status line the way I like it
 set stl=%t\ %m\ %r\ Line:\ %l/%L[%p%%]\ Col:\ %c\ Buf:\ #%n\ [%b][0x%B]
@@ -135,9 +107,6 @@ set wildmenu "Command autocomplettion with the TAB key
 set autoread " Automatically updates buffer when file has been changed outside VIM
 set hidden " Allow switch to another buffer without saving it (you can always do :wa)
 "set autowrite " Write the old file out when switching between files
-
-" Change the currently select tab label colors
-hi TabLineSel ctermfg=Black ctermbg=Yellow
 
 " Change cursor depending on insert mode
 autocmd InsertEnter * set cul
@@ -170,16 +139,9 @@ set ttimeoutlen=100
 
 set statusline+=%#warningmsg#
 set statusline+=%*
-" set statusline+=%f
-" set guifont=Monaco:h18 "Change default font and size for MacVim
-" set shellcmdflag=-ic "Make :! behave like the command prompt
 
-" Let's make it easy to edit this file (mnemonic for the key sequence is
-" 'e'dit 'v'imrc)
+" Let's make it easy to edit and source this file
 nmap <silent> ,ev :e $MYVIMRC<cr>
-
-" And to source this file as well (mnemonic for the key sequence is
-" 's'ource 'v'imrc)
 nmap <silent> ,sv :so $MYVIMRC<cr>
 
 " Use emmet only for html and css files
@@ -205,10 +167,6 @@ noremap <silent> - :call smooth_scroll#up(&scroll, 0, 1)<CR>
 noremap <silent> + :call smooth_scroll#down(&scroll, 0, 1)<CR>
 
 nmap <leader>x <Plug>(LoupeClearHighlight)
-
-" gist-vim configuration
-" let g:gist_show_privates = 1 " Show my private gists with ':Gist -l'
-" let g:gist_post_private = 1 " I want all my gists private by default
 
 " Quickly switch to previous buffer
 nnoremap <leader><leader> <c-^>
@@ -245,7 +203,6 @@ nmap <Down>  :echo "no!"<cr>
 
 set runtimepath+=~/src/dotfiles
 let g:UltiSnipsSnippetsDir="~/src/dotfiles/ultisnips"
-
 let g:UltiSnipsListSnippets = '<c-g>'
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
@@ -275,11 +232,6 @@ endfunc
 " Toggle quickfix
 nnoremap <leader>q <ESC>:call ToggleQF() <CR>
 
-" Call Gundo
-nnoremap <leader>gu :GundoToggle<CR>
-let g:gundo_width = 30
-let g:gundo_preview_bottom = 1
-
 "prevent expand tab in .snippets files
 au Filetype snippets setl noet
 
@@ -290,32 +242,15 @@ autocmd BufRead,BufNewFile  *.*rc set filetype=json
 autocmd BufRead,BufNewFile  *.zshrc set filetype=sh
 autocmd BufRead,BufNewFile  .env.* set filetype=sh
 
-" autocmd BufRead,BufNewFile  *.ejs set filetype=html
-
 "Prevent instant markdown from starting automatically
 " you can invoke it with :InstantMarkdownPreview
 let g:instant_markdown_autostart = 0
 
 " Let vim-airline use powerline patched fonts
-let g:airline#extensions#ale = 1
 let g:airline_powerline_fonts = 1
 let g:airline_detect_crypt=0
 " let g:airline#extensions#tabline#fnamemod = ':t'
 " let g:airline#extensions#fzf#enabled = 1
-
-let g:ale_sign_column_always = 1
-let g:ale_fix_on_save = 1
-let g:ale_linters = {
-	\'typescript': ['eslint'],
-	\'json': ['jsonlint']
-	\}
-
-let g:ale_fixers = {
-	\'*': ['remove_trailing_lines', 'trim_whitespace'],
-	\'javascript': ['prettier', 'eslint'],
-	\'typescript': ['eslint'],
-	\'css': ['stylelint'],
-	\}
 
 " VIM Resources
 " http://robots.thoughtbot.com/integrating-vim-into-your-life
@@ -327,9 +262,8 @@ let g:ale_fixers = {
 " Remove spaces trailing spaces in lines Mnemonic: change spaces
 nnoremap <leader>cs :%s/\s\+$//<CR>
 
-" Set the size of the preview window used by fugitive
-" and others
-set previewheight=20
+" Set the size of the preview window used by fugitive and others
+set previewheight=30
 
 " Prevent cursor from jumping to beginning of line when switching between buffers
 set nostartofline
@@ -337,22 +271,10 @@ set nostartofline
 " Shortcut to close all other windows
 nnoremap <leader>o :only<cr>
 
-" react
-" Toogle NERDTree
-nnoremap <leader>nt :NERDTreeToggle<cr>
-nnoremap <leader>nc :NERDTreeFind<cr>
 let g:vim_json_syntax_conceal = 0
 
 "Add a colored column at column 80
 let &colorcolumn=join(range(81,999),",")
-
-" Gists
-let g:gist_detect_filetype = 1
-let g:gist_post_private = 1
-
-"<CR> - remove highlighting after search
-" Other options here: http://stackoverflow.com/questions/657447/vim-clear-last-search-highlighting
-" noremap <CR> :noh<CR><CR>
 
 " This needs entering CR at the end and then redraw!
 " Check Chrome (cc)
@@ -360,14 +282,12 @@ nnoremap <leader>cc :exec 'silent !open -a "Google Chrome"'<cr>
 
 nnoremap <leader>eu :<C-u>UltiSnipsEdit<cr>
 nnoremap <leader>ep :e package.json<cr>
-nnoremap <leader>ec :e .circleci/config.yml<cr>
 
 " Edit in same path as current buffer
 nnoremap <leader>ew :e <C-R>=expand("%:p:h") . "/" <CR>
 nnoremap <leader>ww :saveas <C-R>=expand("%:p:h") . "/" <CR>
 
 " Join lines discarding empty spaces
-" nnoremap <leader>jj Jx
 nnoremap <leader>ii gg=G''
 
 let g:jsx_ext_required = 0
@@ -407,10 +327,6 @@ set formatoptions-=o
 " See https://bluz71.github.io/2017/06/28/current-treats-future-wants-of-neovim.html
 noremap <C-q> :confirm qall<CR>
 
-noremap <Leader>aa :ALEFix<CR>
-noremap <Leader>an :ALENext<CR>
-noremap <Leader>ap :ALEPrevious<CR>
-
 let g:gtfo#terminals = { 'mac': 'iterm' }
 
 " Global replace word under cursor
@@ -441,11 +357,13 @@ augroup END
 " As seen on: https://coderwall.com/p/lwvhkw/vimtip-5-treat-dashes-as-part-of-word
 set iskeyword+=-
 
+set backupcopy=no
+
 " TO-DO: Currently deoplete interferes with denite
 let g:deoplete#enable_at_startup = 1
 call deoplete#custom#option('sources', {
-\ '_': ['ale', 'buffer'],
-\})
+			\ '_': ['buffer'],
+			\})
 " From: https://github.com/Shougo/deoplete.nvim/issues/816
 " inoremap <silent><expr> <TAB>  pumvisible() ? '\<C-n>' : '\<TAB>'
 
@@ -460,30 +378,30 @@ nmap <leader>cw <Plug>(Scalpel)
 
 " global find/replace inside working directory
 function! FindReplace()
-  " figure out which directory we're in
+	" figure out which directory we're in
 	let dir = expand('%:h')
-  " ask for patterns
-  call inputsave()
-  let find = input('Pattern: ')
-  call inputrestore()
-  let replace = input('Replacement: ')
-  call inputrestore()
-  " are you sure?
-  let confirm = input('WARNING: About to replace ' . find . ' with ' . replace . ' in ' . dir . '/**/* (y/n):')
-  " clear echoed message
-  :redraw
-  if confirm == 'y'
-    " find with rigrep (populate quickfix )
-    :silent exe 'Rg ' . find
-    " use cfdo to substitute on all quickfix files
-    :silent exe 'cfdo %s/' . find . '/' . replace . '/g | update'
-    " close quickfix window
-    :silent exe 'cclose'
-    :echom('Replaced ' . find . ' with ' . replace . ' in all files in ' . dir )
-  else
-    :echom('Find/Replace Aborted')
-    return
-  endif
+	" ask for patterns
+	call inputsave()
+	let find = input('Pattern: ')
+	call inputrestore()
+	let replace = input('Replacement: ')
+	call inputrestore()
+	" are you sure?
+	let confirm = input('WARNING: About to replace ' . find . ' with ' . replace . ' in ' . dir . '/**/* (y/n):')
+	" clear echoed message
+	:redraw
+	if confirm == 'y'
+		" find with rigrep (populate quickfix )
+		:silent exe 'Rg ' . find
+		" use cfdo to substitute on all quickfix files
+		:silent exe 'cfdo %s/' . find . '/' . replace . '/g | update'
+		" close quickfix window
+		:silent exe 'cclose'
+		:echom('Replaced ' . find . ' with ' . replace . ' in all files in ' . dir )
+	else
+		:echom('Find/Replace Aborted')
+		return
+	endif
 endfunction
 
 " mnemonic: Search
@@ -514,34 +432,34 @@ endif
 command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'}, <bang>0)
 
 command! -bang -nargs=* JSFiles
-  \ call fzf#vim#grep(
-  \   'rg --column -t js -t ts --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'},
-  \  <bang>0)
+			\ call fzf#vim#grep(
+			\   'rg --column -t js -t ts --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'},
+			\  <bang>0)
 
 command! -bang -nargs=* JSONFiles
-  \ call fzf#vim#grep(
-  \   'rg --column -t json --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'},
-  \  <bang>0)
+			\ call fzf#vim#grep(
+			\   'rg --column -t json --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'},
+			\  <bang>0)
 
 command! -bang -nargs=* CSSFiles
-  \ call fzf#vim#grep(
-  \   'rg --column -t css --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'},
-  \  <bang>0)
+			\ call fzf#vim#grep(
+			\   'rg --column -t css --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'},
+			\  <bang>0)
 
 command! -bang -nargs=* FeatureFiles
-  \ call fzf#vim#grep(
-  \   'rg --column --type-add "feature:*.feature" -t feature --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'},
-  \  <bang>0)
+			\ call fzf#vim#grep(
+			\   'rg --column --type-add "feature:*.feature" -t feature --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'},
+			\  <bang>0)
 
 command! -bang -nargs=* GraphQLFiles
-  \ call fzf#vim#grep(
-  \   'rg --column --type-add "graphql:*.{graphql, fragment}" -t graphql --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'},
-  \  <bang>0)
+			\ call fzf#vim#grep(
+			\   'rg --column --type-add "graphql:*.{graphql, fragment}" -t graphql --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'},
+			\  <bang>0)
 
 command! -bang -nargs=* StepFiles
-  \ call fzf#vim#grep(
-  \   'rg --column --type-add "steps:*steps.{js,ts}" -t steps --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'},
-  \  <bang>0)
+			\ call fzf#vim#grep(
+			\   'rg --column --type-add "steps:*steps.{js,ts}" -t steps --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'},
+			\  <bang>0)
 
 nnoremap <silent> <leader>hh :History:<cr>
 nnoremap <silent> <leader>b :Buffers<cr>
@@ -577,30 +495,30 @@ nnoremap <silent> <leader>pu :PlugUpdate<CR>
 " Quick terminal exit.
 " Partly btained from https://github.com/sQVe/dotfiles/blob/f9a51f14f7c4b6a9c41345c213927813f0d06768/config/nvim/autocmd.vim
 augroup QuickTerminalExit
-  autocmd!
-  autocmd! FileType fzf tnoremap <buffer> <Esc> <C-c>
-" The next line is mine and it does not quite work :(
-  " autocmd! FileType fzf tnoremap <silent> q :q<cr>
+	autocmd!
+	autocmd! FileType fzf tnoremap <buffer> <Esc> <C-c>
+	" The next line is mine and it does not quite work :(
+	" autocmd! FileType fzf tnoremap <silent> q :q<cr>
 augroup END
 
 let NERDTreeShowHidden=1
 
 "Taken from: https://github.com/junegunn/fzf.vim/issues/647
 function! s:get_registers() abort
-  redir => l:regs
-  silent registers
-  redir END
+	redir => l:regs
+	silent registers
+	redir END
 
-  return split(l:regs, '\n')[1:]
+	return split(l:regs, '\n')[1:]
 endfunction
 
 function! s:registers(...) abort
-  let l:opts = {
-        \ 'source': s:get_registers(),
-        \ 'sink': {x -> feedkeys(matchstr(x, '\v^\S+\ze.*') . (a:1 ? 'P' : 'p'), 'x')},
-        \ 'options': '--prompt="Reg> "'
-        \ }
-  call fzf#run(fzf#wrap(l:opts))
+	let l:opts = {
+				\ 'source': s:get_registers(),
+				\ 'sink': {x -> feedkeys(matchstr(x, '\v^\S+\ze.*') . (a:1 ? 'P' : 'p'), 'x')},
+				\ 'options': '--prompt="Reg> "'
+				\ }
+	call fzf#run(fzf#wrap(l:opts))
 endfunction
 
 command! -bang Registers call s:registers('<bang>' ==# '!')
